@@ -238,11 +238,16 @@
             // 学生信息
             studentInfo.textContent = `学号: ${currentStudent.student_id}`;
             
+            // 计算基本信息
+            const totalScore = currentStudent.problems.reduce((sum, problem) => sum + problem.score, 0);
+            const completedProblems = currentStudent.problems.filter(p => p.passed).length;
+            const averageTime = currentStudent.problems.reduce((sum, problem) => sum + problem.time_spent_seconds, 0) / currentStudent.problems.length;
+            
             // 基本信息卡片
             const infoCards = [
-                { title: '总得分', value: currentStudent.total_score || 0, icon: '🏆', color: 'green' },
-                { title: '完成题目', value: currentStudent.completed_problems || 0, icon: '✅', color: 'blue' },
-                { title: '平均用时', value: `${(currentStudent.average_time || 0).toFixed(1)}秒`, icon: '⏱️', color: 'purple' }
+                { title: '总得分', value: totalScore || 0, icon: '🏆', color: 'green' },
+                { title: '完成题目', value: completedProblems || 0, icon: '✅', color: 'blue' },
+                { title: '平均用时', value: `${(averageTime || 0).toFixed(1)}秒`, icon: '⏱️', color: 'purple' }
             ];
             
             basicInfoCards.innerHTML = infoCards.map(card => `
@@ -258,29 +263,31 @@
         function renderKnowledgePoints() {
             const container = document.getElementById('knowledgePoints');
             
-            if (!currentStudent.knowledge_points || currentStudent.knowledge_points.length === 0) {
+            // 从所有题目的AI分析中提取知识点
+            const allKnowledgePoints = [];
+            currentStudent.problems.forEach(problem => {
+                if (problem.has_ai_analysis && problem.ai_analysis.knowledge_points) {
+                    allKnowledgePoints.push(...problem.ai_analysis.knowledge_points);
+                }
+            });
+            
+            if (allKnowledgePoints.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 text-center">暂无知识点数据</p>';
                 return;
             }
             
-            container.innerHTML = currentStudent.knowledge_points.map(kp => `
+            container.innerHTML = allKnowledgePoints.map(kp => `
                 <div class="border border-gray-200 rounded-lg p-3 mb-2">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-semibold text-lg break-words max-w-none">${kp.name}</h3>
+                        <h3 class="font-semibold text-lg break-words max-w-none">${kp.knowledge_point}</h3>
                         <span class="px-3 py-1 rounded-full text-sm font-medium ${
+                            kp.mastery_level === '精通' ? 'bg-green-100 text-green-800' :
                             kp.mastery_level === '掌握' ? 'bg-green-100 text-green-800' :
                             kp.mastery_level === '基本掌握' ? 'bg-yellow-100 text-yellow-800' :
                             'bg-red-100 text-red-800'
                         }">${kp.mastery_level}</span>
                     </div>
-                    ${kp.specific_errors && kp.specific_errors.length > 0 ? `
-                        <div class="mt-2">
-                            <h4 class="font-medium text-gray-700">具体问题：</h4>
-                            <ul class="list-disc list-inside mt-1 space-y-1">
-                                ${kp.specific_errors.map(error => `<li class="break-words whitespace-normal overflow-visible max-w-none">${error.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
-                            </ul>
-                        </div>
-                    ` : ''}
+                    <div class="text-sm text-gray-600">掌握度: ${kp.mastery_score}%</div>
                 </div>
             `).join('');
         }
@@ -289,25 +296,23 @@
         function renderProblemsTable() {
             const tbody = document.getElementById('problemsTableBody');
             
-            if (!currentStudent.problem_details || currentStudent.problem_details.length === 0) {
+            if (!currentStudent.problems || currentStudent.problems.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">暂无题目数据</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = currentStudent.problem_details.map(problem => `
+            tbody.innerHTML = currentStudent.problems.map(problem => `
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${problem.problem_id}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <span class="px-2 py-1 rounded-full text-xs font-medium ${
-                            problem.status === '通过' ? 'bg-green-100 text-green-800' :
-                            problem.status === '部分通过' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                        }">${problem.status}</span>
+                            problem.passed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }">${problem.passed ? '通过' : '未通过'}</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.score || 0}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.run_count || 0}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.test_count || 0}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${(problem.time_spent || 0).toFixed(1)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${(problem.time_spent_seconds || 0).toFixed(1)}</td>
                 </tr>
             `).join('');
         }
@@ -316,12 +321,23 @@
         function renderImprovementSuggestions() {
             const container = document.getElementById('improvementSuggestions');
             
-            if (!currentStudent.improvement_suggestions || currentStudent.improvement_suggestions.length === 0) {
+            // 从所有题目的AI分析中提取改进建议
+            const allSuggestions = [];
+            currentStudent.problems.forEach(problem => {
+                if (problem.has_ai_analysis && problem.ai_analysis.priority_improvements) {
+                    allSuggestions.push(...problem.ai_analysis.priority_improvements);
+                }
+            });
+            
+            if (allSuggestions.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 text-center">暂无改进建议</p>';
                 return;
             }
             
-            container.innerHTML = currentStudent.improvement_suggestions.map(suggestion => `
+            // 去重
+            const uniqueSuggestions = [...new Set(allSuggestions)];
+            
+            container.innerHTML = uniqueSuggestions.map(suggestion => `
                 <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
                     <span class="text-blue-500 text-lg">💡</span>
                     <p class="text-gray-700 break-words max-w-none">${suggestion.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>

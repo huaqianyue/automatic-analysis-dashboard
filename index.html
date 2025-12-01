@@ -69,16 +69,16 @@
             // 隐藏错误消息
             errorMessage.classList.add('hidden');
             
-            // 验证学号格式
-            if (!/^\d{13}$/.test(studentId)) {
-                errorMessage.textContent = '请输入13位数字的学号';
-                errorMessage.classList.remove('hidden');
-                return;
-            }
-            
             // 管理员学号：00001111 - 跳转到完整仪表板
             if (studentId === '00001111') {
                 window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // 验证学号格式（管理员账号除外）
+            if (!/^\d{13}$/.test(studentId)) {
+                errorMessage.textContent = '请输入13位数字的学号';
+                errorMessage.classList.remove('hidden');
                 return;
             }
             
