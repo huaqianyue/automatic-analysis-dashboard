@@ -199,7 +199,11 @@
         function findStudentById(studentId) {
             if (!dashboardData || !dashboardData.students) return null;
             
-            return dashboardData.students.find(student => student.student_id === studentId);
+            // 查找包含该学号的学生记录（JSON中的学号格式为"学号_姓名"）
+            return dashboardData.students.find(student => {
+                const studentIdInData = student.student_id.split('_')[0]; // 提取学号部分
+                return studentIdInData === studentId;
+            });
         }
 
         // 渲染学生仪表板
