@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学生分析报告</title>
+    <title>作业分析报告</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,7 +33,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-gray-900">📊 学生分析报告</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">📊 作业分析报告</h1>
                     <span id="studentIdDisplay" class="text-lg text-blue-600 font-medium"></span>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -55,7 +55,7 @@
         <!-- 加载提示 -->
         <div id="loadingScreen" class="text-center py-20">
             <div class="loading mx-auto mb-4"></div>
-            <p class="text-gray-600">正在加载学生数据...</p>
+            <p class="text-gray-600">正在加载作业数据...</p>
         </div>
 
         <!-- 错误提示 -->
@@ -69,18 +69,7 @@
         <!-- 学生详情内容 -->
         <div id="studentContent" class="hidden">
             
-            <!-- 学生基本信息卡片 -->
-            <section class="mb-8">
-                <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-gray-900">👤 学生基本信息</h2>
-                        <div class="text-sm text-gray-500" id="studentInfo"></div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="basicInfoCards">
-                        <!-- 基本信息卡片将动态生成 -->
-                    </div>
-                </div>
-            </section>
+
 
             <!-- 题目详细分析 -->
             <section class="mb-8" id="problemsAnalysis">
@@ -156,35 +145,7 @@
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('studentContent').classList.remove('hidden');
             
-            renderBasicInfo();
             renderProblemSelector();
-        }
-
-        // 渲染基本信息
-        function renderBasicInfo() {
-            if (!currentStudent) return;
-            
-            // 计算总分、完成题目数、平均用时
-            const totalScore = currentStudent.problems.reduce((sum, problem) => sum + problem.score, 0);
-            const completedProblems = currentStudent.problems.filter(problem => problem.passed).length;
-            const averageTime = currentStudent.problems.reduce((sum, problem) => sum + (problem.time_spent_seconds || 0), 0) / currentStudent.problems.length;
-            
-            document.getElementById('basicInfoCards').innerHTML = `
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <div class="text-3xl font-bold text-blue-600">${totalScore}</div>
-                    <div class="text-sm text-blue-800">总分</div>
-                </div>
-                <div class="bg-green-50 rounded-lg p-4">
-                    <div class="text-3xl font-bold text-green-600">${completedProblems}/${currentStudent.problems.length}</div>
-                    <div class="text-sm text-green-800">完成题目数</div>
-                </div>
-                <div class="bg-purple-50 rounded-lg p-4">
-                    <div class="text-3xl font-bold text-purple-600">${averageTime.toFixed(1)}s</div>
-                    <div class="text-sm text-purple-800">平均用时</div>
-                </div>
-            `;
-            
-            document.getElementById('studentInfo').textContent = `共 ${currentStudent.problems.length} 道题目`;
         }
 
         // 渲染题目选择器
