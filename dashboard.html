@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSALab 学生行为分析 Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .problem-card:hover {
+            background-color: #f9fafb;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">📊 DSALab 学生行为分析</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <input type="file" id="fileInput" accept=".json" class="hidden">
+                    <button onclick="document.getElementById('fileInput').click()" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+                        📁 加载数据文件
+                    </button>
+                    <div id="dataInfo" class="text-sm text-gray-600"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 加载提示 -->
+        <div id="loadingScreen" class="text-center py-20">
+            <div class="loading mx-auto mb-4"></div>
+            <p class="text-gray-600">请点击上方"加载数据文件"按钮，选择生成的 dashboard.json 文件</p>
+        </div>
+
+        <!-- Dashboard 内容 -->
+        <div id="dashboardContent" class="hidden">
+            
+            <!-- 统计概览 -->
+            <section id="overviewSection" class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">📈 统计概览</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- 统计卡片将动态生成 -->
+                </div>
+            </section>
+
+            <!-- 薄弱知识点分析 -->
+            <section id="weakPointsSection" class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">⚠️ 薄弱知识点分布</h2>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div id="weakPointsChart" class="chart-container"></div>
+                </div>
+                
+                <!-- 薄弱知识点详细列表 -->
+                <div id="weakPointsDetails" class="mt-6 space-y-4">
+                    <!-- 详细信息将动态生成 -->
+                </div>
+            </section>
+
+            <!-- 题目统计 -->
+            <section id="problemsSection" class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">📝 题目统计</h2>
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">题目ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">提交人数</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">通过率</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">平均分</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">平均运行次数</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">平均测试次数</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">平均用时</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problemsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- 表格内容将动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 学生列表 -->
+            <section id="studentsSection" class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">👥 学生详情</h2>
+                
+                <!-- 搜索和筛选 -->
+                <div class="mb-4 flex space-x-4">
+                    <input type="text" id="studentSearch" placeholder="搜索学生ID..." 
+                           class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <select id="problemFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">所有题目</option>
+                    </select>
+                </div>
+                
+                <!-- 学生卡片网格 -->
+                <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 学生卡片将动态生成 -->
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- 学生详情模态框 -->
+    <div id="studentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-lg bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-2xl font-bold text-gray-900"></h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-3xl font-bold">×</button>
+            </div>
+            <div id="modalContent" class="mt-4">
+                <!-- 详细内容将动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局数据
+        let dashboardData = null;
+        let currentStudentFilter = '';
+        let currentProblemFilter = '';
+
+        // 加载数据文件
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        dashboardData = JSON.parse(event.target.result);
+                        loadDashboard();
+                    } catch (error) {
+                        alert('JSON解析失败: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // 加载Dashboard
+        function loadDashboard() {
+            if (!dashboardData) return;
+
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+
+            // 更新数据信息
+            document.getElementById('dataInfo').textContent = 
+                `${dashboardData.assignment_name} | ${dashboardData.generated_time}`;
+
+            // 渲染各个部分
+            renderOverview();
+            renderWeakPoints();
+            renderProblems();
+            renderStudents();
+        }
+
+        // 渲染统计概览
+        function renderOverview() {
+            const stats = dashboardData.statistics_summary;
+            const section = document.getElementById('overviewSection');
+            const grid = section.querySelector('.grid');
+
+            const cards = [
+                { title: '学生总数', value: stats.total_students, icon: '👥', color: 'blue' },
+                { title: '题目总数', value: stats.total_problems, icon: '📝', color: 'green' },
+                { title: '平均分', value: stats.average_score.toFixed(1), icon: '📊', color: 'yellow' },
+                { title: '通过率', value: stats.pass_rate.toFixed(1) + '%', icon: '✅', color: 'purple' }
+            ];
+
+            grid.innerHTML = cards.map(card => `
+                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-${card.color}-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">${card.title}</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">${card.value}</p>
+                        </div>
+                        <div class="text-4xl">${card.icon}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染薄弱知识点（按题目分组）
+        function renderWeakPoints() {
+            const weakPointsByProblem = dashboardData.weak_points_by_problem;
+            
+            if (!weakPointsByProblem || Object.keys(weakPointsByProblem).length === 0) {
+                document.getElementById('weakPointsSection').innerHTML = 
+                    '<p class="text-gray-600">暂无薄弱知识点数据</p>';
+                return;
+            }
+
+            // 收集所有分类用于图表
+            let allCategories = [];
+            for (const [problemId, problemData] of Object.entries(weakPointsByProblem)) {
+                if (problemData.classified_categories) {
+                    problemData.classified_categories.forEach(cat => {
+                        allCategories.push({
+                            problemId: problemId,
+                            name: cat.name,
+                            value: cat.student_count,
+                            severity: cat.severity,
+                            avg_score: cat.avg_score
+                        });
+                    });
+                }
+            }
+
+            // 渲染概览饼图（展示各题目薄弱点分布）
+            if (allCategories.length > 0) {
+                const chart = echarts.init(document.getElementById('weakPointsChart'));
+                const option = {
+                    title: {
+                        text: '薄弱知识点分类统计',
+                        subtext: '按题目和分类展示',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(params) {
+                            const data = params.data;
+                            return `${params.name}<br/>
+                                    题目: ${data.problemId}<br/>
+                                    影响学生数: ${params.value}人<br/>
+                                    占比: ${params.percent}%<br/>
+                                    平均掌握度: ${data.avg_score}分<br/>
+                                    严重程度: ${data.severity}`;
+                        }
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        right: 'right',
+                        top: 'middle',
+                        type: 'scroll',
+                        formatter: function(name) {
+                            return name.length > 15 ? name.substring(0, 15) + '...' : name;
+                        }
+                    },
+                    series: [{
+                        name: '薄弱知识点',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        center: ['40%', '50%'],
+                        avoidLabelOverlap: true,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            formatter: function(params) {
+                                return params.data.problemId + '\n' + params.percent + '%';
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 14,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        data: allCategories.map(cat => ({
+                            name: cat.name,
+                            value: cat.value,
+                            problemId: cat.problemId,
+                            avg_score: cat.avg_score,
+                            severity: cat.severity
+                        }))
+                    }]
+                };
+                chart.setOption(option);
+            }
+
+            // 按题目渲染详细列表
+            const detailsHTML = Object.entries(weakPointsByProblem).map(([problemId, problemData]) => {
+                const categories = problemData.classified_categories || [];
+                
+                if (categories.length === 0) {
+                    return `
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">📝 ${problemId}</h3>
+                            <p class="text-gray-500 italic">该题目无薄弱知识点或AI归类失败</p>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="bg-white rounded-lg shadow p-6 mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">📝 ${problemId}</h3>
+                        
+                        <div class="space-y-4">
+                            ${categories.map(cat => {
+                                const severityColor = {
+                                    '高': 'red',
+                                    '中': 'yellow',
+                                    '低': 'green'
+                                }[cat.severity] || 'gray';
+
+                                return `
+                                    <div class="border-l-4 border-${severityColor}-500 bg-gray-50 rounded-lg p-4">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="flex-1">
+                                                <h4 class="text-lg font-bold text-gray-900">${cat.name}</h4>
+                                                <p class="text-sm text-gray-600 mt-1">${cat.description}</p>
+                                            </div>
+                                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-${severityColor}-100 text-${severityColor}-800 ml-4">
+                                                ${cat.severity}
+                                            </span>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="text-center bg-white rounded p-2">
+                                                <p class="text-xl font-bold text-gray-900">${cat.student_count}</p>
+                                                <p class="text-xs text-gray-600">影响学生数</p>
+                                            </div>
+                                            <div class="text-center bg-white rounded p-2">
+                                                <p class="text-xl font-bold text-gray-900">${cat.avg_score.toFixed(1)}</p>
+                                                <p class="text-xs text-gray-600">平均掌握度</p>
+                                            </div>
+                                        </div>
+                                        ${cat.students && cat.students.length > 0 ? `
+                                            <details class="mt-3">
+                                                <summary class="cursor-pointer text-blue-600 hover:text-blue-800 text-sm font-semibold">
+                                                    👥 查看具体学生 (${cat.students.length}人)
+                                                </summary>
+                                                <div class="mt-2 bg-white rounded p-2">
+                                                    <div class="flex flex-wrap gap-2">
+                                                        ${cat.students.map(studentId => `
+                                                            <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs cursor-pointer hover:bg-blue-100"
+                                                                  onclick="event.stopPropagation(); showStudentDetail('${studentId}')">
+                                                                ${studentId}
+                                                            </span>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                            </details>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('weakPointsDetails').innerHTML = detailsHTML;
+        }
+
+        // 渲染题目统计
+        function renderProblems() {
+            const problems = dashboardData.problems;
+            const tbody = document.getElementById('problemsTableBody');
+            const filter = document.getElementById('problemFilter');
+
+            // 填充筛选器
+            filter.innerHTML = '<option value="">所有题目</option>' +
+                Object.keys(problems).map(id => `<option value="${id}">${id}</option>`).join('');
+
+            // 格式化时间
+            function formatTime(seconds) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                return `${hours}h ${minutes}m`;
+            }
+
+            // 渲染表格
+            tbody.innerHTML = Object.values(problems).map(p => `
+                <tr class="hover:bg-gray-50 cursor-pointer problem-card" onclick="filterByProblem('${p.problem_id}')">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${p.problem_id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.total_students}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold ${
+                            p.pass_rate >= 80 ? 'bg-green-100 text-green-800' :
+                            p.pass_rate >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }">
+                            ${p.pass_rate.toFixed(1)}%
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.average_score.toFixed(1)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.average_run_count.toFixed(1)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${p.average_test_count.toFixed(1)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">${formatTime(p.average_time_seconds)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 渲染学生列表
+        function renderStudents() {
+            const students = dashboardData.students;
+            const grid = document.getElementById('studentsGrid');
+
+            // 应用筛选
+            let filteredStudents = students.filter(s => {
+                const matchesSearch = !currentStudentFilter || 
+                    s.student_id.toLowerCase().includes(currentStudentFilter.toLowerCase());
+                const matchesProblem = !currentProblemFilter || 
+                    s.problems.some(p => p.problem_id === currentProblemFilter);
+                return matchesSearch && matchesProblem;
+            });
+
+            grid.innerHTML = filteredStudents.map(student => {
+                const problems = currentProblemFilter ? 
+                    student.problems.filter(p => p.problem_id === currentProblemFilter) :
+                    student.problems;
+
+                const avgScore = problems.length > 0 ? 
+                    (problems.reduce((sum, p) => sum + p.score, 0) / problems.length).toFixed(1) : 0;
+                const passedCount = problems.filter(p => p.passed).length;
+                
+                // 计算AI评测平均分
+                const aiProblems = problems.filter(p => p.has_ai_analysis && p.ai_analysis);
+                const avgAiScore = aiProblems.length > 0 ?
+                    (aiProblems.reduce((sum, p) => sum + p.ai_analysis.mastery_percentage, 0) / aiProblems.length).toFixed(1) : null;
+
+                return `
+                    <div class="bg-white rounded-lg shadow p-6 student-card transition cursor-pointer"
+                         onclick="showStudentDetail('${student.student_id}')">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">👤 ${student.student_id}</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">完成题目:</span>
+                                <span class="font-semibold">${problems.length}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">通过题目:</span>
+                                <span class="font-semibold text-green-600">${passedCount}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">平均分:</span>
+                                <span class="font-semibold">${avgScore}</span>
+                            </div>
+                            ${avgAiScore !== null ? `
+                                <div class="flex justify-between border-t pt-2 mt-2">
+                                    <span class="text-gray-600">🤖 AI评测分数:</span>
+                                    <span class="font-semibold text-blue-600">${avgAiScore}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition">
+                            查看详情
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 显示学生详情
+        function showStudentDetail(studentId) {
+            const student = dashboardData.students.find(s => s.student_id === studentId);
+            if (!student) return;
+
+            document.getElementById('modalTitle').textContent = `学生详情: ${studentId}`;
+            
+            const content = `
+                <div class="space-y-6">
+                    ${student.problems.map(problem => {
+                        const hasAI = problem.has_ai_analysis && problem.ai_analysis;
+                        const ai = hasAI ? problem.ai_analysis : null;
+                        
+                        return `
+                            <div class="border rounded-lg p-6 bg-gray-50">
+                                <h4 class="text-xl font-bold text-gray-900 mb-4">📝 ${problem.problem_id}</h4>
+                                
+                                <!-- 基本统计 -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                    <div class="bg-white rounded p-3">
+                                        <p class="text-xs text-gray-600">分数</p>
+                                        <p class="text-2xl font-bold ${problem.passed ? 'text-green-600' : 'text-red-600'}">
+                                            ${problem.score}
+                                        </p>
+                                    </div>
+                                    <div class="bg-white rounded p-3">
+                                        <p class="text-xs text-gray-600">运行次数</p>
+                                        <p class="text-2xl font-bold">${problem.run_count}</p>
+                                    </div>
+                                    <div class="bg-white rounded p-3">
+                                        <p class="text-xs text-gray-600">测试次数</p>
+                                        <p class="text-2xl font-bold">${problem.test_count}</p>
+                                    </div>
+                                    <div class="bg-white rounded p-3">
+                                        <p class="text-xs text-gray-600">编辑次数</p>
+                                        <p class="text-2xl font-bold">${problem.edit_count}</p>
+                                    </div>
+                                </div>
+
+                                ${hasAI ? `
+                                    <!-- AI分析详细内容 -->
+                                    <div class="bg-white rounded-lg p-4 mt-4 space-y-4">
+                                        <h5 class="text-lg font-bold text-gray-900 border-b pb-2">🤖 AI深度分析</h5>
+                                        
+                                        <!-- 总体评估 -->
+                                        <div class="bg-blue-50 rounded-lg p-4">
+                                            <h6 class="font-bold text-gray-900 mb-3">📊 总体评估</h6>
+                                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+                                                <div>
+                                                    <p class="text-xs text-gray-600">掌握度</p>
+                                                    <p class="text-xl font-bold text-blue-600">${ai.mastery_percentage}%</p>
+                                                    <p class="text-xs text-gray-500">${ai.mastery_level}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-xs text-gray-600">推荐等级</p>
+                                                    <p class="text-2xl font-bold">${ai.grade_recommendation || 'N/A'}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-xs text-gray-600">分析置信度</p>
+                                                    <p class="text-sm font-semibold">${ai.confidence_level}</p>
+                                                </div>
+                                            </div>
+                                            ${ai.key_strengths && ai.key_strengths.length > 0 ? `
+                                                <div class="mb-2">
+                                                    <p class="text-xs font-semibold text-green-700 mb-1">✅ 优势:</p>
+                                                    <ul class="text-xs text-gray-700 space-y-1">
+                                                        ${ai.key_strengths.map(s => `<li class="break-words whitespace-normal">• ${s}</li>`).join('')}
+                                                    </ul>
+                                                </div>
+                                            ` : ''}
+                                            ${ai.key_weaknesses && ai.key_weaknesses.length > 0 ? `
+                                                <div class="mb-2">
+                                                    <p class="text-xs font-semibold text-red-700 mb-1">⚠️ 劣势:</p>
+                                                    <ul class="text-xs text-gray-700 space-y-1">
+                                                        ${ai.key_weaknesses.map(w => `<li class="break-words whitespace-normal">• ${w}</li>`).join('')}
+                                                    </ul>
+                                                </div>
+                                            ` : ''}
+                                            ${ai.priority_improvements && ai.priority_improvements.length > 0 ? `
+                                                <div>
+                                                    <p class="text-xs font-semibold text-blue-700 mb-1">💡 改进建议:</p>
+                                                    <ul class="text-xs text-gray-700 space-y-1">
+                                                        ${ai.priority_improvements.map(i => `<li class="break-words whitespace-normal">• ${i}</li>`).join('')}
+                                                    </ul>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        
+                                        <!-- 代码质量 & 调试能力 -->
+                                        <div class="grid md:grid-cols-2 gap-4">
+                                            <div class="bg-green-50 rounded-lg p-3">
+                                                <h6 class="font-bold text-gray-900 mb-2">💻 代码质量</h6>
+                                                <div class="space-y-1 text-xs">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">正确性:</span>
+                                                        <span class="font-semibold">${ai.code_correctness || 'N/A'}分</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">时间复杂度:</span>
+                                                        <span class="font-semibold ${ai.code_is_optimal ? 'text-green-600' : 'text-yellow-600'}">
+                                                            ${ai.code_time_complexity || 'N/A'}
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">可读性:</span>
+                                                        <span class="font-semibold">${ai.code_readability || 'N/A'}分</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">代码风格:</span>
+                                                        <span class="font-semibold">${ai.code_style || 'N/A'}分</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-purple-50 rounded-lg p-3">
+                                                <h6 class="font-bold text-gray-900 mb-2">🔧 调试能力</h6>
+                                                <div class="space-y-1 text-xs">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">得分:</span>
+                                                        <span class="font-semibold text-purple-600">${ai.debugging_score}分</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-600">等级:</span>
+                                                        <span class="font-semibold">${ai.debugging_level || 'N/A'}</span>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <p class="text-gray-600 mb-1">策略:</p>
+                                                        <p class="text-gray-700">${ai.debugging_strategy || 'N/A'}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-gray-600 mb-1">效率:</p>
+                                                        <p class="text-gray-700">${ai.error_fixing_efficiency || 'N/A'}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 学习过程 -->
+                                        <div class="bg-yellow-50 rounded-lg p-3">
+                                            <h6 class="font-bold text-gray-900 mb-2">📚 学习过程</h6>
+                                            <div class="grid md:grid-cols-3 gap-3 text-xs">
+                                                <div>
+                                                    <p class="text-gray-600 mb-1">解题策略:</p>
+                                                    <p class="font-semibold">${ai.problem_solving_strategy || 'N/A'}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-gray-600 mb-1">独立性:</p>
+                                                    <p class="font-semibold">${ai.independence_level || 'N/A'}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-gray-600 mb-1">时间管理:</p>
+                                                    <p class="font-semibold">${ai.time_management || 'N/A'}</p>
+                                                </div>
+                                            </div>
+                                            ${ai.total_iterations > 0 ? `
+                                                <div class="mt-2 pt-2 border-t border-yellow-200">
+                                                    <p class="text-gray-600 text-xs">迭代次数: <span class="font-semibold">${ai.total_iterations}</span></p>
+                                                    <p class="text-gray-600 text-xs">改进模式: <span class="font-semibold">${ai.improvement_pattern || 'N/A'}</span></p>
+                                                    <p class="text-gray-700 text-xs mt-1">${ai.learning_curve || ''}</p>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        
+                                        <!-- 知识点详细分析 -->
+                                        ${ai.knowledge_points && ai.knowledge_points.length > 0 ? `
+                                            <div class="bg-gray-50 rounded-lg p-3">
+                                                <h6 class="font-bold text-gray-900 mb-2">📖 知识点掌握情况</h6>
+                                                <div class="space-y-2 max-h-96 overflow-y-auto">
+                                                    ${ai.knowledge_points.map(kp => `
+                                                        <div class="bg-white rounded p-3 border-l-4 ${kp.is_weak ? 'border-red-500' : 'border-green-500'}">
+                                                            <div class="flex justify-between items-start mb-2">
+                                                                <p class="text-xs font-semibold text-gray-900 break-words max-w-none">${kp.knowledge_point}</p>
+                                                                <span class="text-xs px-2 py-1 rounded ${
+                                                                    kp.mastery_score >= 80 ? 'bg-green-100 text-green-800' :
+                                                                    kp.mastery_score >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                                                                    'bg-red-100 text-red-800'
+                                                                }">${kp.mastery_score}分</span>
+                                                            </div>
+                                                            <p class="text-xs text-gray-600 break-words max-w-none">${kp.mastery_level}</p>
+                                                            ${kp.specific_errors && kp.specific_errors.length > 0 ? `
+                                                                <div class="mt-1">
+                                                                    <p class="text-xs font-semibold text-red-600">❌ 具体错误:</p>
+                                                                    <ul class="text-xs text-gray-700 ml-3 list-disc">
+                                                                        ${kp.specific_errors.map(error => `<li class="break-words whitespace-normal overflow-visible max-w-none">${error.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                                                                    </ul>
+                                                                </div>
+                                                            ` : ''}
+                                                            ${kp.evidence_from_history && kp.evidence_from_history.length > 0 ? `
+                                                                <div class="mt-1">
+                                                                    <p class="text-xs font-semibold text-blue-600">📋 历史证据:</p>
+                                                                    <ul class="text-xs text-gray-700 ml-3 list-disc">
+                                                                        ${kp.evidence_from_history.map(evidence => `<li class="break-words whitespace-normal">${evidence.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                                                                    </ul>
+                                                                </div>
+                                                            ` : ''}
+                                                            ${kp.improvement_suggestions && kp.improvement_suggestions.length > 0 ? `
+                                                                <div class="mt-1">
+                                                                    <p class="text-xs font-semibold text-green-600">💡 改进建议:</p>
+                                                                    <ul class="text-xs text-gray-700 ml-3 list-disc">
+                                                                        ${kp.improvement_suggestions.map(suggestion => `<li class="break-words whitespace-normal">${suggestion.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                                                                    </ul>
+                                                                </div>
+                                                            ` : ''}
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                ` : '<p class="text-sm text-gray-500 italic mt-4">暂无AI分析数据</p>'}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('studentModal').classList.remove('hidden');
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('studentModal').classList.add('hidden');
+        }
+
+        // 按题目筛选
+        function filterByProblem(problemId) {
+            document.getElementById('problemFilter').value = problemId;
+            currentProblemFilter = problemId;
+            renderStudents();
+            document.getElementById('studentsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 搜索学生
+        document.getElementById('studentSearch').addEventListener('input', function(e) {
+            currentStudentFilter = e.target.value;
+            renderStudents();
+        });
+
+        // 题目筛选
+        document.getElementById('problemFilter').addEventListener('change', function(e) {
+            currentProblemFilter = e.target.value;
+            renderStudents();
+        });
+
+        // 点击模态框外部关闭
+        document.getElementById('studentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
