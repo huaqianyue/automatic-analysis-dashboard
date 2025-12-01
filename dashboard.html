@@ -64,7 +64,8 @@
         <!-- 加载提示 -->
         <div id="loadingScreen" class="text-center py-20">
             <div class="loading mx-auto mb-4"></div>
-            <p class="text-gray-600">请点击上方"加载数据文件"按钮，选择生成的 dashboard.json 文件</p>
+            <p class="text-gray-600">正在自动加载数据文件...</p>
+            <p class="text-sm text-gray-500 mt-2">如果自动加载失败，请点击上方"加载数据文件"按钮手动选择</p>
         </div>
 
         <!-- Dashboard 内容 -->
@@ -156,7 +157,33 @@
         let currentStudentFilter = '';
         let currentProblemFilter = '';
 
-        // 加载数据文件
+        // 自动加载默认数据文件
+        function loadDefaultData() {
+            fetch('第一次作业_dashboard.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('文件加载失败: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    dashboardData = data;
+                    loadDashboard();
+                })
+                .catch(error => {
+                    console.warn('自动加载失败，显示手动加载界面:', error);
+                    // 显示手动加载界面
+                    document.getElementById('loadingScreen').classList.remove('hidden');
+                    document.getElementById('dashboardContent').classList.add('hidden');
+                });
+        }
+
+        // 页面加载时自动尝试加载数据
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDefaultData();
+        });
+
+        // 手动加载数据文件
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
