@@ -3,18 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自动分析仪表板</title>
-    <meta http-equiv="refresh" content="0; url=dashboard.html">
-    <script>
-        // JavaScript重定向作为备用方案
-        window.location.href = 'dashboard.html';
-    </script>
+    <title>学生分析系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .student-id-input {
+            letter-spacing: 0.2em;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
 </head>
 <body>
-    <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">
-        <h1>自动分析仪表板</h1>
-        <p>正在重定向到仪表板页面...</p>
-        <p>如果页面没有自动跳转，请 <a href="dashboard.html">点击这里</a></p>
+    <div class="login-card w-full max-w-md p-8 mx-4">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">学生分析系统</h1>
+            <p class="text-gray-600">请输入学号查看分析报告</p>
+        </div>
+        
+        <form id="studentForm" class="space-y-6">
+            <div>
+                <label for="studentId" class="block text-sm font-medium text-gray-700 mb-2">学号</label>
+                <input 
+                    type="text" 
+                    id="studentId" 
+                    name="studentId" 
+                    maxlength="8"
+                    placeholder="请输入8位学号"
+                    class="student-id-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-xl"
+                    required
+                >
+                <p class="text-xs text-gray-500 mt-2 text-center">管理员请输入：00001111</p>
+            </div>
+            
+            <button 
+                type="submit" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200"
+            >
+                查看分析报告
+            </button>
+        </form>
+        
+        <div id="errorMessage" class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden">
+            学号不存在，请联系管理员
+        </div>
     </div>
+
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('studentId').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // 隐藏错误消息
+            errorMessage.classList.add('hidden');
+            
+            // 验证学号格式
+            if (!/^\d{8}$/.test(studentId)) {
+                errorMessage.textContent = '请输入8位数字的学号';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            
+            // 管理员学号：00001111 - 跳转到完整仪表板
+            if (studentId === '00001111') {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // 检查学号是否存在（这里需要根据实际数据验证）
+            const validStudentIds = ['2022141460127', '2023141410315', '2024141460008', '2024141460010', '2024141460011', '2024141460021', '2024141460043', '2024141460046', '2024141460048', '2024141460054', '2024141460059', '2024141460064', '2024141460065', '2024141460075', '2024141460089', '2024141460094', '2024141460098', '2024141460111', '2024141460119', '2024141460138', '2024141460157', '2024141460182', '2024141460188', '2024141460205', '2024141460208', '2024141460210', '2024141460212', '2024141460213', '2024141460227', '2024141460242', '2024141460256', '2024141460266', '2024141460275', '2024141460282', '2024141460295', '2024141460302', '2024141460304', '2024141460314', '2024141460316', '2024141460317', '2024141460330', '2024141460371', '2024141460379', '2024141460390', '2024141460391', '2024141460396', '2024141460398', '2024141460427', '2024141460429', '2024141460432', '2024141460436', '2024141460437', '2024141460441', '2024141460452', '2024141460453', '2024141460456', '2024141460474', '2024141460484', '2024141460497', '2024141460507', '2024141460508', '2024141460516', '2024141460518', '2024141460532', '2024141460533', '2024141460534', '2024141460535', '2024141460549', '2024141460562', '2024141460576', '2024141460588', '2024141500100', '2024151470001', '2024151610028']; // 示例有效学号
+            
+            if (validStudentIds.includes(studentId)) {
+                // 跳转到学生详情页面，传递学号参数
+                window.location.href = `student_dashboard.html?studentId=${studentId}`;
+            } else {
+                errorMessage.textContent = '学号不存在，请联系管理员';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+        
+        // 输入框格式化
+        document.getElementById('studentId').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^\d]/g, '').slice(0, 8);
+        });
+    </script>
 </body>
 </html>

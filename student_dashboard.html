@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生分析报告</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .fullscreen {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 fullscreen">
+    
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-gray-900">📊 学生分析报告</h1>
+                    <span id="studentIdDisplay" class="text-lg text-blue-600 font-medium"></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-blue-600 hover:text-blue-800 font-medium">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fullscreen">
+        
+        <!-- 加载提示 -->
+        <div id="loadingScreen" class="text-center py-20">
+            <div class="loading mx-auto mb-4"></div>
+            <p class="text-gray-600">正在加载学生数据...</p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorScreen" class="hidden text-center py-20">
+            <div class="text-red-500 text-6xl mb-4">⚠️</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">学号不存在</h2>
+            <p class="text-gray-600 mb-4">请联系管理员获取正确的学号</p>
+            <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">返回首页</a>
+        </div>
+
+        <!-- 学生详情内容 -->
+        <div id="studentContent" class="hidden">
+            
+            <!-- 学生基本信息卡片 -->
+            <section class="mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-900">👤 学生基本信息</h2>
+                        <div class="text-sm text-gray-500" id="studentInfo"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="basicInfoCards">
+                        <!-- 基本信息卡片将动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 知识点掌握情况 -->
+            <section class="mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">📚 知识点掌握情况</h2>
+                    <div class="space-y-4 max-h-96 overflow-y-auto" id="knowledgePoints">
+                        <!-- 知识点卡片将动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 题目完成情况 -->
+            <section class="mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">📝 题目完成情况</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">题目ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">得分</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">运行次数</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">测试次数</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">用时(秒)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="problemsTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- 题目表格将动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 学习行为分析 -->
+            <section class="mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 学习行为分析</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="chart-container">
+                            <div id="behaviorChart1" class="chart-container"></div>
+                        </div>
+                        <div class="chart-container">
+                            <div id="behaviorChart2" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 改进建议 -->
+            <section class="mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">💡 个性化改进建议</h2>
+                    <div class="space-y-3" id="improvementSuggestions">
+                        <!-- 改进建议将动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        // 全局数据
+        let dashboardData = null;
+        let currentStudentId = null;
+        let currentStudent = null;
+
+        // 从URL参数获取学号
+        function getStudentIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('studentId');
+        }
+
+        // 加载学生数据
+        function loadStudentData() {
+            currentStudentId = getStudentIdFromURL();
+            
+            if (!currentStudentId) {
+                showError('未提供学号参数');
+                return;
+            }
+
+            // 显示学号
+            document.getElementById('studentIdDisplay').textContent = `学号: ${currentStudentId}`;
+
+            fetch('第一次作业_dashboard.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('数据文件加载失败');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    dashboardData = data;
+                    
+                    // 查找学生数据
+                    currentStudent = findStudentById(currentStudentId);
+                    
+                    if (currentStudent) {
+                        renderStudentDashboard();
+                    } else {
+                        showError('学号不存在');
+                    }
+                })
+                .catch(error => {
+                    console.error('数据加载失败:', error);
+                    showError('数据加载失败，请检查网络连接');
+                });
+        }
+
+        // 根据学号查找学生
+        function findStudentById(studentId) {
+            if (!dashboardData || !dashboardData.students) return null;
+            
+            return dashboardData.students.find(student => student.student_id === studentId);
+        }
+
+        // 渲染学生仪表板
+        function renderStudentDashboard() {
+            if (!currentStudent) return;
+
+            // 隐藏加载界面，显示内容
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('studentContent').classList.remove('hidden');
+
+            // 渲染基本信息
+            renderBasicInfo();
+            
+            // 渲染知识点掌握情况
+            renderKnowledgePoints();
+            
+            // 渲染题目完成情况
+            renderProblemsTable();
+            
+            // 渲染改进建议
+            renderImprovementSuggestions();
+            
+            // 渲染图表
+            renderCharts();
+        }
+
+        // 渲染基本信息
+        function renderBasicInfo() {
+            const studentInfo = document.getElementById('studentInfo');
+            const basicInfoCards = document.getElementById('basicInfoCards');
+            
+            // 学生信息
+            studentInfo.textContent = `学号: ${currentStudent.student_id}`;
+            
+            // 基本信息卡片
+            const infoCards = [
+                { title: '总得分', value: currentStudent.total_score || 0, icon: '🏆', color: 'green' },
+                { title: '完成题目', value: currentStudent.completed_problems || 0, icon: '✅', color: 'blue' },
+                { title: '平均用时', value: `${(currentStudent.average_time || 0).toFixed(1)}秒`, icon: '⏱️', color: 'purple' }
+            ];
+            
+            basicInfoCards.innerHTML = infoCards.map(card => `
+                <div class="bg-${card.color}-50 border border-${card.color}-200 rounded-lg p-4 text-center">
+                    <div class="text-3xl mb-2">${card.icon}</div>
+                    <div class="text-2xl font-bold text-${card.color}-600">${card.value}</div>
+                    <div class="text-sm text-gray-600">${card.title}</div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染知识点掌握情况
+        function renderKnowledgePoints() {
+            const container = document.getElementById('knowledgePoints');
+            
+            if (!currentStudent.knowledge_points || currentStudent.knowledge_points.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center">暂无知识点数据</p>';
+                return;
+            }
+            
+            container.innerHTML = currentStudent.knowledge_points.map(kp => `
+                <div class="border border-gray-200 rounded-lg p-3 mb-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-semibold text-lg break-words max-w-none">${kp.name}</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium ${
+                            kp.mastery_level === '掌握' ? 'bg-green-100 text-green-800' :
+                            kp.mastery_level === '基本掌握' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }">${kp.mastery_level}</span>
+                    </div>
+                    ${kp.specific_errors && kp.specific_errors.length > 0 ? `
+                        <div class="mt-2">
+                            <h4 class="font-medium text-gray-700">具体问题：</h4>
+                            <ul class="list-disc list-inside mt-1 space-y-1">
+                                ${kp.specific_errors.map(error => `<li class="break-words whitespace-normal overflow-visible max-w-none">${error.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // 渲染题目完成情况表格
+        function renderProblemsTable() {
+            const tbody = document.getElementById('problemsTableBody');
+            
+            if (!currentStudent.problem_details || currentStudent.problem_details.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">暂无题目数据</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = currentStudent.problem_details.map(problem => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${problem.problem_id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${
+                            problem.status === '通过' ? 'bg-green-100 text-green-800' :
+                            problem.status === '部分通过' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }">${problem.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.score || 0}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.run_count || 0}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${problem.test_count || 0}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${(problem.time_spent || 0).toFixed(1)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 渲染改进建议
+        function renderImprovementSuggestions() {
+            const container = document.getElementById('improvementSuggestions');
+            
+            if (!currentStudent.improvement_suggestions || currentStudent.improvement_suggestions.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center">暂无改进建议</p>';
+                return;
+            }
+            
+            container.innerHTML = currentStudent.improvement_suggestions.map(suggestion => `
+                <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                    <span class="text-blue-500 text-lg">💡</span>
+                    <p class="text-gray-700 break-words max-w-none">${suggestion.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                </div>
+            `).join('');
+        }
+
+        // 渲染图表
+        function renderCharts() {
+            // 这里可以添加学生专属的图表
+            // 例如：知识点掌握程度雷达图、题目完成情况柱状图等
+        }
+
+        // 显示错误界面
+        function showError(message) {
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('errorScreen').classList.remove('hidden');
+            
+            const errorTitle = document.querySelector('#errorScreen h2');
+            errorTitle.textContent = message;
+        }
+
+        // 页面加载时开始加载数据
+        window.addEventListener('DOMContentLoaded', function() {
+            loadStudentData();
+        });
+
+    </script>
+</body>
+</html>
