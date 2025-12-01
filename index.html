@@ -39,12 +39,11 @@
                     type="text" 
                     id="studentId" 
                     name="studentId" 
-                    maxlength="8"
-                    placeholder="请输入8位学号"
+                    maxlength="13"
+                    placeholder="请输入13位学号"
                     class="student-id-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-xl"
                     required
                 >
-                <p class="text-xs text-gray-500 mt-2 text-center">管理员请输入：00001111</p>
             </div>
             
             <button 
@@ -71,8 +70,8 @@
             errorMessage.classList.add('hidden');
             
             // 验证学号格式
-            if (!/^\d{8}$/.test(studentId)) {
-                errorMessage.textContent = '请输入8位数字的学号';
+            if (!/^\d{13}$/.test(studentId)) {
+                errorMessage.textContent = '请输入13位数字的学号';
                 errorMessage.classList.remove('hidden');
                 return;
             }
@@ -97,7 +96,7 @@
         
         // 输入框格式化
         document.getElementById('studentId').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^\d]/g, '').slice(0, 8);
+            this.value = this.value.replace(/[^\d]/g, '').slice(0, 13);
         });
     </script>
 </body>
