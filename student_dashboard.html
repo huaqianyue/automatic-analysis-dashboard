@@ -340,22 +340,18 @@
                     <!-- 基本统计 -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div class="bg-white rounded p-3">
-                            <p class="text-xs text-gray-600">分数</p>
+                            <p class="text-sm text-gray-600">分数</p>
                             <p class="text-2xl font-bold ${problemData.passed ? 'text-green-600' : 'text-red-600'}">
                             ${problemData.score}
                         </p>
                         </div>
                         <div class="bg-white rounded p-3">
-                            <p class="text-xs text-gray-600">运行次数</p>
+                            <p class="text-sm text-gray-600">运行次数</p>
                             <p class="text-2xl font-bold">${problemData.run_count}</p>
                         </div>
                         <div class="bg-white rounded p-3">
-                            <p class="text-xs text-gray-600">测试次数</p>
+                            <p class="text-sm text-gray-600">测试次数</p>
                             <p class="text-2xl font-bold">${problemData.test_count}</p>
-                        </div>
-                        <div class="bg-white rounded p-3">
-                            <p class="text-xs text-gray-600">编辑次数</p>
-                            <p class="text-2xl font-bold">${problemData.edit_count}</p>
                         </div>
                     </div>
 
@@ -370,39 +366,39 @@
                                 <h6 class="font-bold text-gray-900 mb-3">📊 总体评估</h6>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
                                     <div>
-                                        <p class="text-xs text-gray-600">掌握度</p>
+                                        <p class="text-sm text-gray-600">掌握度</p>
                                         <p class="text-xl font-bold text-blue-600">${ai.overall_assessment?.mastery_percentage || 'N/A'}%</p>
-                                        <p class="text-xs text-gray-500">${ai.overall_assessment?.mastery_level || 'N/A'}</p>
+                                        <p class="text-sm text-gray-500">${ai.overall_assessment?.mastery_level || 'N/A'}</p>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-600">推荐等级</p>
+                                        <p class="text-sm text-gray-600">推荐等级</p>
                                         <p class="text-2xl font-bold">${ai.overall_assessment?.grade_recommendation || 'N/A'}</p>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-600">分析置信度</p>
+                                        <p class="text-sm text-gray-600">分析置信度</p>
                                         <p class="text-sm font-semibold">${ai.overall_assessment?.confidence_level || 'N/A'}</p>
                                     </div>
                                 </div>
                                 ${ai.overall_assessment?.key_strengths && ai.overall_assessment.key_strengths.length > 0 ? `
                                     <div class="mb-2">
-                                        <p class="text-xs font-semibold text-green-700 mb-1">✅ 优势:</p>
-                                        <ul class="text-xs text-gray-700 space-y-1">
+                                        <p class="text-sm font-semibold text-green-700 mb-1">✅ 优势:</p>
+                                        <ul class="text-sm text-gray-700 space-y-1">
                                             ${ai.overall_assessment.key_strengths.map(s => `<li class="break-words whitespace-normal">• ${s}</li>`).join('')}
                                         </ul>
                                     </div>
                                 ` : ''}
                                 ${ai.overall_assessment?.key_weaknesses && ai.overall_assessment.key_weaknesses.length > 0 ? `
                                     <div class="mb-2">
-                                        <p class="text-xs font-semibold text-red-700 mb-1">⚠️ 劣势:</p>
-                                        <ul class="text-xs text-gray-700 space-y-1">
+                                        <p class="text-sm font-semibold text-red-700 mb-1">⚠️ 劣势:</p>
+                                        <ul class="text-sm text-gray-700 space-y-1">
                                             ${ai.overall_assessment.key_weaknesses.map(w => `<li class="break-words whitespace-normal">• ${w}</li>`).join('')}
                                         </ul>
                                     </div>
                                 ` : ''}
                                 ${ai.overall_assessment?.priority_improvements && ai.overall_assessment.priority_improvements.length > 0 ? `
                                     <div>
-                                        <p class="text-xs font-semibold text-blue-700 mb-1">💡 改进建议:</p>
-                                        <ul class="text-xs text-gray-700 space-y-1">
+                                        <p class="text-sm font-semibold text-blue-700 mb-1">💡 改进建议:</p>
+                                        <ul class="text-sm text-gray-700 space-y-1">
                                             ${ai.overall_assessment.priority_improvements.map(i => `<li class="break-words whitespace-normal">• ${i}</li>`).join('')}
                                         </ul>
                                     </div>
@@ -413,13 +409,13 @@
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div class="bg-green-50 rounded-lg p-3">
                                     <h6 class="font-bold text-gray-900 mb-2">💻 代码质量</h6>
-                                    <div class="space-y-1 text-xs">
+                                    <div class="space-y-1 text-sm">
                                         <div>
                                             <div class="flex justify-between">
                                                 <span class="text-gray-600">正确性:</span>
                                                 <span class="font-semibold">${ai.code_quality?.correctness?.score || 'N/A'}分</span>
                                             </div>
-                                            <p class="text-gray-500 text-xs">${ai.code_quality?.correctness?.comment || ''}</p>
+                                            <p class="text-gray-500 text-sm">${ai.code_quality?.correctness?.comment || ''}</p>
                                         </div>
                                         <div>
                                             <div class="flex justify-between">
@@ -428,28 +424,28 @@
                                                     ${ai.code_quality?.time_complexity?.actual || 'N/A'}
                                                 </span>
                                             </div>
-                                            <p class="text-gray-500 text-xs">${ai.code_quality?.time_complexity?.comment || ''}</p>
+                                            <p class="text-gray-500 text-sm">${ai.code_quality?.time_complexity?.comment || ''}</p>
                                         </div>
                                         <div>
                                             <div class="flex justify-between">
                                                 <span class="text-gray-600">可读性:</span>
                                                 <span class="font-semibold">${ai.code_quality?.readability?.score || 'N/A'}分</span>
                                             </div>
-                                            <p class="text-gray-500 text-xs">${ai.code_quality?.readability?.comment || ''}</p>
+                                            <p class="text-gray-500 text-sm">${ai.code_quality?.readability?.comment || ''}</p>
                                         </div>
                                         <div>
                                             <div class="flex justify-between">
                                                 <span class="text-gray-600">代码风格:</span>
                                                 <span class="font-semibold">${ai.code_quality?.code_style?.score || 'N/A'}分</span>
                                             </div>
-                                            <p class="text-gray-500 text-xs">${ai.code_quality?.code_style?.comment || ''}</p>
+                                            <p class="text-gray-500 text-sm">${ai.code_quality?.code_style?.comment || ''}</p>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="bg-purple-50 rounded-lg p-3">
                                     <h6 class="font-bold text-gray-900 mb-2">🔧 调试能力</h6>
-                                    <div class="space-y-1 text-xs">
+                                    <div class="space-y-1 text-sm">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">得分:</span>
                                             <span class="font-semibold text-purple-600">${ai.debugging_ability?.score || 'N/A'}分</span>
@@ -473,7 +469,7 @@
                             <!-- 学习过程 -->
                             <div class="bg-yellow-50 rounded-lg p-3">
                                 <h6 class="font-bold text-gray-900 mb-2">📚 学习过程</h6>
-                                <div class="grid md:grid-cols-3 gap-3 text-xs">
+                                <div class="grid md:grid-cols-3 gap-3 text-sm">
                                     <div>
                                         <p class="text-gray-600 mb-1">解题策略:</p>
                                         <p class="font-semibold">${ai.learning_process_assessment?.problem_solving_strategy || 'N/A'}</p>
@@ -486,9 +482,9 @@
                                 </div>
                                 ${ai.code_evolution_analysis?.total_iterations > 0 ? `
                                     <div class="mt-2 pt-2 border-t border-yellow-200">
-                                        <p class="text-gray-600 text-xs">迭代次数: <span class="font-semibold">${ai.code_evolution_analysis.total_iterations}</span></p>
-                                        <p class="text-gray-600 text-xs">改进模式: <span class="font-semibold">${ai.code_evolution_analysis.improvement_pattern || 'N/A'}</span></p>
-                                        <p class="text-gray-700 text-xs mt-1">${ai.code_evolution_analysis.learning_curve || ''}</p>
+                                        <p class="text-gray-600 text-sm">迭代次数: <span class="font-semibold">${ai.code_evolution_analysis.total_iterations}</span></p>
+                                        <p class="text-gray-600 text-sm">改进模式: <span class="font-semibold">${ai.code_evolution_analysis.improvement_pattern || 'N/A'}</span></p>
+                                        <p class="text-gray-700 text-sm mt-1">${ai.code_evolution_analysis.learning_curve || ''}</p>
                                     </div>
                                 ` : ''}
                             </div>
@@ -501,26 +497,26 @@
                                         ${ai.knowledge_points_analysis.map(kp => `
                                             <div class="bg-white rounded p-3 border-l-4 ${kp.is_weak ? 'border-red-500' : 'border-green-500'}">
                                                 <div class="flex justify-between items-start mb-2">
-                                                    <p class="text-xs font-semibold text-gray-900 break-words max-w-none">${kp.knowledge_point}</p>
-                                                    <span class="text-xs px-2 py-1 rounded ${
+                                                    <p class="text-sm font-semibold text-gray-900 break-words max-w-none">${kp.knowledge_point}</p>
+                                                    <span class="text-sm px-2 py-1 rounded ${
                                                         kp.mastery_score >= 80 ? 'bg-green-100 text-green-800' :
                                                         kp.mastery_score >= 60 ? 'bg-yellow-100 text-yellow-800' :
                                                         'bg-red-100 text-red-800'
                                                     }">${kp.mastery_score}分</span>
                                                 </div>
-                                                <p class="text-xs text-gray-600 break-words max-w-none">${kp.mastery_level}</p>
+                                                <p class="text-sm text-gray-600 break-words max-w-none">${kp.mastery_level}</p>
                                                 ${kp.specific_errors && kp.specific_errors.length > 0 ? `
                                                     <div class="mt-1">
-                                                        <p class="text-xs font-semibold text-red-600">❌ 具体错误:</p>
-                                                        <ul class="text-xs text-gray-700 ml-3 list-disc">
+                                                        <p class="text-sm font-semibold text-red-600">❌ 具体错误:</p>
+                                                        <ul class="text-sm text-gray-700 ml-3 list-disc">
                                                             ${kp.specific_errors.map(error => `<li class="break-words whitespace-normal overflow-visible max-w-none">${error.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
                                                         </ul>
                                                     </div>
                                                 ` : ''}
                                                 ${kp.evidence_from_history && kp.evidence_from_history.length > 0 ? `
                                                     <div class="mt-1">
-                                                        <p class="text-xs font-semibold text-green-600">✅ 历史证据:</p>
-                                                        <ul class="text-xs text-gray-700 ml-3 list-disc">
+                                                        <p class="text-sm font-semibold text-green-600">✅ 历史证据:</p>
+                                                        <ul class="text-sm text-gray-700 ml-3 list-disc">
                                                             ${kp.evidence_from_history.map(evidence => `<li class="break-words whitespace-normal overflow-visible max-w-none">${evidence.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
                                                         </ul>
                                                     </div>
