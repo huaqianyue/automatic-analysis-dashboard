@@ -37,6 +37,13 @@
                     <span id="studentIdDisplay" class="text-lg text-blue-600 font-medium"></span>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <!-- 作业切换下拉菜单 -->
+                    <div class="relative">
+                        <select id="assignmentSelector" class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <!-- 作业选项将动态生成 -->
+                        </select>
+                    </div>
+                    
                     <!-- 题目切换下拉菜单 -->
                     <div class="relative" id="problemSelectorContainer">
                         <select id="problemSelector" class="hidden bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -81,83 +88,224 @@
     </main>
 
     <script>
-        // 全局数据
-        let dashboardData = null;
-        let currentStudentId = null;
-        let currentStudent = null;
+        // 题目信息 - 直接写入源代码，避免动态加载
+        const problems = [
+            {
+                "id": "1SequentialList1",
+                "shortDescription": "顺序表1：删除并返回最小值",
+                "fullDescription": "利用顺序表的操作，实现以下的函数：从顺序表中删除具有最小值的元素并由函数返回被删元素的值。空出的位置由最后一个元素填补，若顺序表为空则显示出错信息并退出运行。"
+            },
+            {
+                "id": "1SequentialList2",
+                "shortDescription": "顺序表2：插入元素x到第i个位置",
+                "fullDescription": "向顺序表中第i个位置插入一个新的元素x。如果i不合理则显示出错信息并退出运行。"
+            },
+            {
+                "id": "1SequentialList3",
+                "shortDescription": "顺序表3：合并两个有序顺序表",
+                "fullDescription": "将两个有序顺序表合并成一个新的有序顺序表并由函数返回结果顺序表。"
+            },
+            {
+                "id": "2String1",
+                "shortDescription": "字符串1：按分隔符拆分字符串",
+                "fullDescription": "给你一个字符串数组 `words` 和一个字符 `separator` ，请你按 `separator` 拆分 `words` 中的每个字符串。返回一个由拆分后的新字符串组成的字符串数组，"
+            },
+            {
+                "id": "2String2",
+                "shortDescription": "字符串2：最大重复子字符串",
+                "fullDescription": "给你一个字符串 `sequence` 和 `word`，如果字符串 `word` 连续重复 `k` 次形成的字符串是 `sequence` 的一个子字符串，那么单词 `word` 的 **重复值为 k**。单词 `word` 的 **最大重复值** 是单词 `word` 在 `sequence` 中最大的重复值。如果 `word` 不是 `sequence` 的子串，那么重复值 `k` 为 `0`。\n\n请你返回 **最大重复值 k**。"
+            },
+            {
+                "id": "2String3",
+                "shortDescription": "字符串3：最长回文子串",
+                "fullDescription": "给你一个字符串 `s`，找到 `s` 中最长的回文子串。\n\n**回文串** 是正着读和反着读都一样的字符串。"
+            },
+            {
+                "id": "2String4",
+                "shortDescription": "字符串4：无重复字符的最长子串",
+                "fullDescription": "给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。\n\n**子串** 是字符串中连续的字符序列。"
+            }
+        ];
 
-        // 从URL参数获取学号
-        function getStudentIdFromURL() {
+        // 全局数据
+        let currentStudentId = null;
+        let currentStudentName = null;
+        let currentStudent = null;
+        let currentProblemId = null;
+        let currentAssignment = '第一次作业'; // 默认作业
+        
+        // 可用作业列表
+        const assignments = [
+            '第一次作业',
+            '第二次作业'
+        ];
+
+        // 从URL参数获取学号和姓名
+        function getURLParameters() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('studentId');
+            return {
+                studentId: urlParams.get('studentId'),
+                studentName: urlParams.get('studentName')
+            };
         }
 
         // 加载学生数据
         function loadStudentData() {
-            currentStudentId = getStudentIdFromURL();
+            const params = getURLParameters();
+            currentStudentId = params.studentId;
+            currentStudentName = params.studentName;
             
             if (!currentStudentId) {
                 showError('未提供学号参数');
                 return;
             }
+            
+            if (!currentStudentName) {
+                showError('未提供姓名参数');
+                return;
+            }
 
-            // 显示学号
-            document.getElementById('studentIdDisplay').textContent = `学号: ${currentStudentId}`;
-
-            fetch('第一次作业_dashboard.json')
+            // 显示学号和姓名
+            document.getElementById('studentIdDisplay').textContent = `学号: ${currentStudentId} | 姓名: ${currentStudentName}`;
+            
+            // 根据当前作业过滤出对应的题目
+            // 第一次作业的题目ID以"1"开头，第二次作业的题目ID以"2"开头
+            const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
+            const filteredProblems = problems.filter(problem => 
+                problem.id.startsWith(currentAssignmentPrefix)
+            );
+            
+            // 默认加载当前作业的第一个题目
+            if (filteredProblems.length > 0) {
+                loadProblemData(filteredProblems[0].id);
+            } else {
+                showError('当前作业没有可用的题目');
+            }
+        }
+        
+        // 加载特定题目的学生数据
+        function loadProblemData(problemId) {
+            currentProblemId = problemId;
+            
+            // 构造学生文件夹名称：学号_姓名
+            const studentFolder = `${currentStudentId}_${currentStudentName}`;
+            
+            // 构造statistics.json文件路径
+            const filePath = `${currentAssignment}/${studentFolder}/${problemId}/statistics.json`;
+            
+            console.log('尝试加载文件:', filePath);
+            
+            // 尝试加载学生的统计数据
+            fetch(filePath)
                 .then(response => {
+                    console.log('文件加载响应:', response.status, response.statusText);
+                    
                     if (!response.ok) {
-                        throw new Error('数据文件加载失败');
+                        // 如果路径失败，尝试替换中文空格和特殊字符
+                        const normalizedStudentFolder = studentFolder.normalize('NFC');
+                        const normalizedFilePath = `${currentAssignment}/${normalizedStudentFolder}/${problemId}/statistics.json`;
+                        
+                        console.log('尝试加载归一化路径:', normalizedFilePath);
+                        
+                        if (normalizedFilePath !== filePath) {
+                            return fetch(normalizedFilePath)
+                                .then(normalizedResponse => {
+                                    console.log('归一化路径响应:', normalizedResponse.status, normalizedResponse.statusText);
+                                    if (!normalizedResponse.ok) {
+                                        throw new Error('学生数据文件加载失败');
+                                    }
+                                    return normalizedResponse;
+                                });
+                        }
+                        throw new Error('学生数据文件加载失败');
                     }
-                    return response.json();
+                    return response;
                 })
+                .then(response => response.json())
                 .then(data => {
-                    dashboardData = data;
+                    console.log('成功加载数据:', data);
                     
-                    // 查找学生数据
-                    currentStudent = findStudentById(currentStudentId);
+                    // 将加载的数据转换为与原dashboardData兼容的格式
+                    currentStudent = {
+                        student_id: currentStudentId,
+                        problems: [{
+                            problem_id: problemId,
+                            score: data.test_result?.final_score || 0,
+                            passed: (data.test_result?.final_score || 0) >= 60, // 假设60分为及格
+                            run_count: data.execution?.run_count || 0,
+                            test_count: data.execution?.test_count || 0,
+                            edit_count: data.edit_behavior?.total_edits || 0,
+                            has_ai_analysis: !!data.ai_analysis,
+                            ai_analysis: data.ai_analysis
+                        }]
+                    };
                     
-                    if (currentStudent) {
-                        renderStudentDashboard();
-                    } else {
-                        showError('学号不存在');
-                    }
+                    renderStudentDashboard();
+                    renderProblemAnalysis();
                 })
                 .catch(error => {
-                    console.error('数据加载失败:', error);
-                    showError('数据加载失败，请检查网络连接');
+                    console.error('数据加载失败详情:', error);
+                    showError('未找到该学号的作业数据');
                 });
         }
 
-        // 根据学号查找学生
-        function findStudentById(studentId) {
-            if (!dashboardData || !dashboardData.students) return null;
-            
-            // 提取学号的数字部分进行比较（JSON中的格式为"学号_姓名"）
-            return dashboardData.students.find(student => {
-                const studentIdNumber = student.student_id.split('_')[0];
-                return studentIdNumber === studentId;
-            });
-        }
+
 
         // 渲染学生仪表板
         function renderStudentDashboard() {
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('studentContent').classList.remove('hidden');
             
+            renderAssignmentSelector();
             renderProblemSelector();
         }
 
+        // 渲染作业选择器
+        function renderAssignmentSelector() {
+            const selector = document.getElementById('assignmentSelector');
+            
+            // 生成作业选项
+            selector.innerHTML = assignments.map(assignment => 
+                `<option value="${assignment}">${assignment}</option>`
+            ).join('');
+            
+            // 设置当前选中的作业
+            selector.value = currentAssignment;
+            
+            // 添加切换事件
+            selector.addEventListener('change', function() {
+                currentAssignment = this.value;
+                
+                // 根据新切换的作业过滤出对应的题目
+                const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
+                const filteredProblems = problems.filter(problem => 
+                    problem.id.startsWith(currentAssignmentPrefix)
+                );
+                
+                // 重新加载新作业的第一个题目
+                if (filteredProblems.length > 0) {
+                    loadProblemData(filteredProblems[0].id);
+                } else {
+                    showError('当前作业没有可用的题目');
+                }
+            });
+        }
+        
         // 渲染题目选择器
         function renderProblemSelector() {
-            if (!currentStudent || !currentStudent.problems) return;
-            
             const selector = document.getElementById('problemSelector');
             const container = document.getElementById('problemSelectorContainer');
             
-            // 生成题目选项
-            selector.innerHTML = currentStudent.problems.map((problem, index) => 
-                `<option value="${index}">${problem.problem_id}</option>`
+            // 根据当前作业过滤出对应的题目
+            // 第一次作业的题目ID以"1"开头，第二次作业的题目ID以"2"开头
+            const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
+            const filteredProblems = problems.filter(problem => 
+                problem.id.startsWith(currentAssignmentPrefix)
+            );
+            
+            // 生成题目选项，显示shortDescription
+            selector.innerHTML = filteredProblems.map(problem => 
+                `<option value="${problem.id}" ${problem.id === currentProblemId ? 'selected' : ''}>${problem.shortDescription}</option>`
             ).join('');
             
             // 显示选择器
@@ -165,47 +313,49 @@
             
             // 添加切换事件
             selector.addEventListener('change', function() {
-                renderProblemAnalysis(parseInt(this.value));
+                loadProblemData(this.value);
             });
-            
-            // 默认显示第一个题目
-            if (currentStudent.problems.length > 0) {
-                selector.value = '0';
-                renderProblemAnalysis(0);
-            }
         }
 
         // 渲染单个题目分析
-        function renderProblemAnalysis(problemIndex) {
-            if (!currentStudent || !currentStudent.problems || !currentStudent.problems[problemIndex]) return;
+        function renderProblemAnalysis() {
+            if (!currentStudent || !currentStudent.problems || currentStudent.problems.length === 0) return;
             
-            const problem = currentStudent.problems[problemIndex];
-            const hasAI = problem.has_ai_analysis && problem.ai_analysis;
-            const ai = hasAI ? problem.ai_analysis : null;
+            // 获取当前题目的数据
+            const problemData = currentStudent.problems[0];
+            // 获取当前题目的详细信息
+            const currentProblemInfo = problems.find(p => p.id === currentProblemId);
+            
+            const hasAI = problemData.has_ai_analysis && problemData.ai_analysis;
+            const ai = hasAI ? problemData.ai_analysis : null;
             
             const problemHTML = `
                 <div class="border rounded-lg p-6 bg-gray-50">
-                    <h4 class="text-xl font-bold text-gray-900 mb-4">📝 ${problem.problem_id}</h4>
+                    <h4 class="text-xl font-bold text-gray-900 mb-4">📝 ${currentProblemInfo.shortDescription}</h4>
+                    <div class="mb-4 p-4 bg-white rounded-lg">
+                        <h5 class="font-semibold text-gray-900 mb-2">题目描述</h5>
+                        <p class="text-gray-700 whitespace-pre-line">${currentProblemInfo.fullDescription}</p>
+                    </div>
                     
                     <!-- 基本统计 -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div class="bg-white rounded p-3">
                             <p class="text-xs text-gray-600">分数</p>
-                            <p class="text-2xl font-bold ${problem.passed ? 'text-green-600' : 'text-red-600'}">
-                                ${problem.score}
-                            </p>
+                            <p class="text-2xl font-bold ${problemData.passed ? 'text-green-600' : 'text-red-600'}">
+                            ${problemData.score}
+                        </p>
                         </div>
                         <div class="bg-white rounded p-3">
                             <p class="text-xs text-gray-600">运行次数</p>
-                            <p class="text-2xl font-bold">${problem.run_count}</p>
+                            <p class="text-2xl font-bold">${problemData.run_count}</p>
                         </div>
                         <div class="bg-white rounded p-3">
                             <p class="text-xs text-gray-600">测试次数</p>
-                            <p class="text-2xl font-bold">${problem.test_count}</p>
+                            <p class="text-2xl font-bold">${problemData.test_count}</p>
                         </div>
                         <div class="bg-white rounded p-3">
                             <p class="text-xs text-gray-600">编辑次数</p>
-                            <p class="text-2xl font-bold">${problem.edit_count}</p>
+                            <p class="text-2xl font-bold">${problemData.edit_count}</p>
                         </div>
                     </div>
 
@@ -213,6 +363,7 @@
                         <!-- AI分析详细内容 -->
                         <div class="bg-white rounded-lg p-4 mt-4 space-y-4">
                             <h5 class="text-lg font-bold text-gray-900 border-b pb-2">🤖 AI深度分析</h5>
+                            <p class="text-sm text-gray-500 italic mb-4">所有分析基于提交的文件，由大模型生成，结果仅供参考。</p>
                             
                             <!-- 总体评估 -->
                             <div class="bg-blue-50 rounded-lg p-4">
@@ -220,39 +371,39 @@
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
                                     <div>
                                         <p class="text-xs text-gray-600">掌握度</p>
-                                        <p class="text-xl font-bold text-blue-600">${ai.mastery_percentage}%</p>
-                                        <p class="text-xs text-gray-500">${ai.mastery_level}</p>
+                                        <p class="text-xl font-bold text-blue-600">${ai.overall_assessment?.mastery_percentage || 'N/A'}%</p>
+                                        <p class="text-xs text-gray-500">${ai.overall_assessment?.mastery_level || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-600">推荐等级</p>
-                                        <p class="text-2xl font-bold">${ai.grade_recommendation || 'N/A'}</p>
+                                        <p class="text-2xl font-bold">${ai.overall_assessment?.grade_recommendation || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-600">分析置信度</p>
-                                        <p class="text-sm font-semibold">${ai.confidence_level}</p>
+                                        <p class="text-sm font-semibold">${ai.overall_assessment?.confidence_level || 'N/A'}</p>
                                     </div>
                                 </div>
-                                ${ai.key_strengths && ai.key_strengths.length > 0 ? `
+                                ${ai.overall_assessment?.key_strengths && ai.overall_assessment.key_strengths.length > 0 ? `
                                     <div class="mb-2">
                                         <p class="text-xs font-semibold text-green-700 mb-1">✅ 优势:</p>
                                         <ul class="text-xs text-gray-700 space-y-1">
-                                            ${ai.key_strengths.map(s => `<li class="break-words whitespace-normal">• ${s}</li>`).join('')}
+                                            ${ai.overall_assessment.key_strengths.map(s => `<li class="break-words whitespace-normal">• ${s}</li>`).join('')}
                                         </ul>
                                     </div>
                                 ` : ''}
-                                ${ai.key_weaknesses && ai.key_weaknesses.length > 0 ? `
+                                ${ai.overall_assessment?.key_weaknesses && ai.overall_assessment.key_weaknesses.length > 0 ? `
                                     <div class="mb-2">
                                         <p class="text-xs font-semibold text-red-700 mb-1">⚠️ 劣势:</p>
                                         <ul class="text-xs text-gray-700 space-y-1">
-                                            ${ai.key_weaknesses.map(w => `<li class="break-words whitespace-normal">• ${w}</li>`).join('')}
+                                            ${ai.overall_assessment.key_weaknesses.map(w => `<li class="break-words whitespace-normal">• ${w}</li>`).join('')}
                                         </ul>
                                     </div>
                                 ` : ''}
-                                ${ai.priority_improvements && ai.priority_improvements.length > 0 ? `
+                                ${ai.overall_assessment?.priority_improvements && ai.overall_assessment.priority_improvements.length > 0 ? `
                                     <div>
                                         <p class="text-xs font-semibold text-blue-700 mb-1">💡 改进建议:</p>
                                         <ul class="text-xs text-gray-700 space-y-1">
-                                            ${ai.priority_improvements.map(i => `<li class="break-words whitespace-normal">• ${i}</li>`).join('')}
+                                            ${ai.overall_assessment.priority_improvements.map(i => `<li class="break-words whitespace-normal">• ${i}</li>`).join('')}
                                         </ul>
                                     </div>
                                 ` : ''}
@@ -263,23 +414,35 @@
                                 <div class="bg-green-50 rounded-lg p-3">
                                     <h6 class="font-bold text-gray-900 mb-2">💻 代码质量</h6>
                                     <div class="space-y-1 text-xs">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">正确性:</span>
-                                            <span class="font-semibold">${ai.code_correctness || 'N/A'}分</span>
+                                        <div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">正确性:</span>
+                                                <span class="font-semibold">${ai.code_quality?.correctness?.score || 'N/A'}分</span>
+                                            </div>
+                                            <p class="text-gray-500 text-xs">${ai.code_quality?.correctness?.comment || ''}</p>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">时间复杂度:</span>
-                                            <span class="font-semibold ${ai.code_is_optimal ? 'text-green-600' : 'text-yellow-600'}">
-                                                ${ai.code_time_complexity || 'N/A'}
-                                            </span>
+                                        <div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">时间复杂度:</span>
+                                                <span class="font-semibold ${ai.code_quality?.time_complexity?.is_optimal ? 'text-green-600' : 'text-yellow-600'}">
+                                                    ${ai.code_quality?.time_complexity?.actual || 'N/A'}
+                                                </span>
+                                            </div>
+                                            <p class="text-gray-500 text-xs">${ai.code_quality?.time_complexity?.comment || ''}</p>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">可读性:</span>
-                                            <span class="font-semibold">${ai.code_readability || 'N/A'}分</span>
+                                        <div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">可读性:</span>
+                                                <span class="font-semibold">${ai.code_quality?.readability?.score || 'N/A'}分</span>
+                                            </div>
+                                            <p class="text-gray-500 text-xs">${ai.code_quality?.readability?.comment || ''}</p>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">代码风格:</span>
-                                            <span class="font-semibold">${ai.code_style || 'N/A'}分</span>
+                                        <div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">代码风格:</span>
+                                                <span class="font-semibold">${ai.code_quality?.code_style?.score || 'N/A'}分</span>
+                                            </div>
+                                            <p class="text-gray-500 text-xs">${ai.code_quality?.code_style?.comment || ''}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -289,19 +452,19 @@
                                     <div class="space-y-1 text-xs">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">得分:</span>
-                                            <span class="font-semibold text-purple-600">${ai.debugging_score}分</span>
+                                            <span class="font-semibold text-purple-600">${ai.debugging_ability?.score || 'N/A'}分</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">等级:</span>
-                                            <span class="font-semibold">${ai.debugging_level || 'N/A'}</span>
+                                            <span class="font-semibold">${ai.debugging_ability?.level || 'N/A'}</span>
                                         </div>
                                         <div class="mt-2">
                                             <p class="text-gray-600 mb-1">策略:</p>
-                                            <p class="text-gray-700">${ai.debugging_strategy || 'N/A'}</p>
+                                            <p class="text-gray-700">${ai.debugging_ability?.debugging_strategy || 'N/A'}</p>
                                         </div>
                                         <div>
                                             <p class="text-gray-600 mb-1">效率:</p>
-                                            <p class="text-gray-700">${ai.error_fixing_efficiency || 'N/A'}</p>
+                                            <p class="text-gray-700">${ai.debugging_ability?.error_fixing_efficiency || 'N/A'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -313,32 +476,29 @@
                                 <div class="grid md:grid-cols-3 gap-3 text-xs">
                                     <div>
                                         <p class="text-gray-600 mb-1">解题策略:</p>
-                                        <p class="font-semibold">${ai.problem_solving_strategy || 'N/A'}</p>
+                                        <p class="font-semibold">${ai.learning_process_assessment?.problem_solving_strategy || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-gray-600 mb-1">独立性:</p>
-                                        <p class="font-semibold">${ai.independence_level || 'N/A'}</p>
+                                        <p class="font-semibold">${ai.learning_process_assessment?.independence_level || 'N/A'}</p>
                                     </div>
-                                    <div>
-                                        <p class="text-gray-600 mb-1">时间管理:</p>
-                                        <p class="font-semibold">${ai.time_management || 'N/A'}</p>
-                                    </div>
+
                                 </div>
-                                ${ai.total_iterations > 0 ? `
+                                ${ai.code_evolution_analysis?.total_iterations > 0 ? `
                                     <div class="mt-2 pt-2 border-t border-yellow-200">
-                                        <p class="text-gray-600 text-xs">迭代次数: <span class="font-semibold">${ai.total_iterations}</span></p>
-                                        <p class="text-gray-600 text-xs">改进模式: <span class="font-semibold">${ai.improvement_pattern || 'N/A'}</span></p>
-                                        <p class="text-gray-700 text-xs mt-1">${ai.learning_curve || ''}</p>
+                                        <p class="text-gray-600 text-xs">迭代次数: <span class="font-semibold">${ai.code_evolution_analysis.total_iterations}</span></p>
+                                        <p class="text-gray-600 text-xs">改进模式: <span class="font-semibold">${ai.code_evolution_analysis.improvement_pattern || 'N/A'}</span></p>
+                                        <p class="text-gray-700 text-xs mt-1">${ai.code_evolution_analysis.learning_curve || ''}</p>
                                     </div>
                                 ` : ''}
                             </div>
                             
                             <!-- 知识点详细分析 -->
-                            ${ai.knowledge_points && ai.knowledge_points.length > 0 ? `
+                            ${ai.knowledge_points_analysis && ai.knowledge_points_analysis.length > 0 ? `
                                 <div class="bg-gray-50 rounded-lg p-3">
                                     <h6 class="font-bold text-gray-900 mb-2">📖 知识点掌握情况</h6>
                                     <div class="space-y-2 max-h-96 overflow-y-auto">
-                                        ${ai.knowledge_points.map(kp => `
+                                        ${ai.knowledge_points_analysis.map(kp => `
                                             <div class="bg-white rounded p-3 border-l-4 ${kp.is_weak ? 'border-red-500' : 'border-green-500'}">
                                                 <div class="flex justify-between items-start mb-2">
                                                     <p class="text-xs font-semibold text-gray-900 break-words max-w-none">${kp.knowledge_point}</p>

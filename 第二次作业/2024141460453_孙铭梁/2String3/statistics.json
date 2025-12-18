@@ -1,0 +1,256 @@
+{
+  "problem_id": "2String3",
+  "total_events": 16,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 5,
+    "total_tests": 5,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 奇数长度回文\r\n[PASS] 奇数长度回文 - 结果: \"bab\"\r\n[TEST] 偶数长度回文\r\n[PASS] 偶数长度回文 - 结果: \"bb\"\r\n[TEST] 单字符\r\n[PASS] 单字符 - 结果: \"a\"\r\n[TEST] 无长回文\r\n[PASS] 无长回文 - 结果: \"a\"\r\n[TEST] 较长回文\r\n[PASS] 较长回文 - 结果: \"anana\"\r\n[RESULT] 5/5 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1761747584971
+  },
+  "time_analysis": {
+    "total_duration_seconds": 1436.55,
+    "total_duration_formatted": "23分56秒",
+    "active_duration_seconds": 430.82,
+    "first_load_time": "2025-10-29 22:02:07",
+    "actual_start_time": "2025-10-29 22:18:53",
+    "actual_start_timestamp": 1761747533697,
+    "last_event_time": "2025-10-29 22:26:04",
+    "effective_duration_seconds": 430.82,
+    "effective_duration_formatted": "7分10秒",
+    "load_to_first_run_seconds": 1015.95,
+    "first_run_to_pass_seconds": 41.08,
+    "pause_count": 1,
+    "longest_pause_seconds": 1005.73,
+    "invalid_load_count": 1
+  },
+  "edit_behavior": {
+    "total_edits": 3,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 1,
+    "paste_replace_count": 0,
+    "delete_count": 2,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 0.3333,
+    "total_chars_added": 539,
+    "total_chars_deleted": 15,
+    "large_pastes": [
+      {
+        "timestamp": 1761747533697,
+        "char_count": 539,
+        "preview": " string ans = \"\";\n    \n    for (int i = 0; i < s.l..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 1,
+    "test_count": 1,
+    "successful_runs": 1,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 2,
+    "save_count": 3,
+    "has_audio": true,
+    "audio_record_count": 2,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1761747533697,
+          "char_count": 539,
+          "preview": " string ans = \"\";\n    \n    for (int i = 0; i < s.l..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 33.3%，可能存在抄袭",
+      "value": 0.3333
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 70
+  },
+  "metadata": {
+    "student_id": "2024141460453_孙铭梁",
+    "problem_id": "2String3",
+    "analysis_time": "2025-12-18 10:08:44",
+    "history_events_count": 16,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "中心扩展法求解最长回文子串",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生直接粘贴了中心扩展法的核心实现代码",
+          "代码能够正确处理奇数和偶数长度的回文串",
+          "通过了所有测试用例，包括边界情况（单字符、无长回文）"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": [
+          "鼓励学生尝试理解中心扩展法的原理，而不仅仅是复制粘贴"
+        ]
+      },
+      {
+        "knowledge_point": "字符串操作 (substr)",
+        "mastery_level": "精通",
+        "mastery_score": 90,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中正确使用了 `s.substr(l, r - l + 1)` 来提取子串",
+          "测试结果表明提取的子串是正确的"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "循环和条件判断",
+        "mastery_level": "精通",
+        "mastery_score": 90,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中使用了嵌套的 `for` 循环来遍历所有可能的中心点和扩展范围",
+          "条件 `l >= 0 && r < s.length() && s[l] == s[r]` 正确地控制了回文扩展的边界和条件",
+          "条件 `r - l + 1 > ans.length()` 正确地更新了最长回文子串"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "理解和实现算法",
+        "mastery_level": "一般",
+        "mastery_score": 70,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在 `problem_loaded` 事件后，直接通过 `paste_insert` 操作插入了大部分代码，表明对算法的理解和独立实现能力有待提高。",
+          "虽然代码最终通过了测试，但其学习过程更多是代码的集成而非从零构建。"
+        ],
+        "specific_errors": [
+          "缺乏独立思考和从头实现算法的能力"
+        ],
+        "improvement_suggestions": [
+          "鼓励学生在理解算法思路后，尝试不看参考代码，独立编写核心逻辑。",
+          "可以先从伪代码或流程图开始，再转化为实际代码。"
+        ]
+      }
+    ],
+    "weak_knowledge_points_summary": [
+      {
+        "knowledge_point": "理解和实现算法",
+        "severity": "中等",
+        "priority": "中"
+      }
+    ],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "学生没有遇到编译错误，且代码通过了所有测试，表明能够识别和避免错误。",
+      "error_fixing_efficiency": "由于没有错误，无法评估效率，但从一次运行和测试通过来看，效率极高。",
+      "debugging_strategy": "学生在粘贴代码后，直接运行和测试，一次成功，表明其对代码的正确性有较高信心，或者粘贴的代码本身就是经过验证的。",
+      "evidence_from_history": "一次 `run_start` 后紧接着 `run_end` 成功，然后 `test_start` 后 `test_completed` 成功，整个过程无错误记录。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 2,
+      "improvement_pattern": "直接完成型",
+      "key_changes": [
+        "首次提交：空函数体",
+        "第二次提交：粘贴了完整的中心扩展法实现代码，并删除了原有的`return \"\";`语句。"
+      ],
+      "learning_curve": "学生直接从模板代码跳到了一个完整的解决方案，学习曲线不明显，更多是代码的集成。",
+      "independence_assessment": "低独立性，主要通过粘贴代码完成，对算法的理解和独立实现能力有待观察。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "最终代码通过了所有测试用例，逻辑正确。"
+      },
+      "time_complexity": {
+        "actual": "O(n^2)",
+        "optimal": "O(n^2)",
+        "is_optimal": true,
+        "comment": "中心扩展法的时间复杂度为O(n^2)，对于此问题是常见的最优解法之一。"
+      },
+      "space_complexity": {
+        "actual": "O(1)",
+        "optimal": "O(1)",
+        "is_optimal": true,
+        "comment": "空间复杂度为O(1)，仅使用了常数额外空间。"
+      },
+      "readability": {
+        "score": 75,
+        "comment": "代码结构清晰，变量命名尚可，但缺少对算法思路的注释。"
+      },
+      "code_style": {
+        "score": 80,
+        "comment": "代码格式基本符合规范，缩进和空格使用得当。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "代码集成型",
+      "strategy_description": "学生加载题目后，通过粘贴操作快速引入了解决方案，并通过运行和测试验证了其有效性。",
+      "independence_level": "低",
+      "independence_evidence": "粘贴操作占比较高（1次），且代码量大，表明独立编写的代码量较少。",
+      "time_management": "总学习时长7分10秒，在粘贴代码后，运行和测试过程非常迅速，表明其主要时间花在了代码的引入而非理解和编写上。",
+      "focus_level": "在粘贴代码后，运行和测试过程非常集中，表明对验证代码有效性是专注的。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 85,
+      "mastery_level": "良好",
+      "grade_recommendation": "B",
+      "confidence_level": "高",
+      "confidence_reason": "学生提交的代码一次性通过了所有测试，并且代码质量较高。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "核心算法和基本语法掌握良好，但独立解决问题的能力有待加强。",
+      "key_strengths": [
+        "能够快速找到并集成有效的解决方案",
+        "代码的正确性和效率较高",
+        "熟悉C++基本语法和字符串操作"
+      ],
+      "key_weaknesses": [
+        "独立思考和实现算法的能力不足",
+        "学习过程依赖于外部代码"
+      ],
+      "priority_improvements": [
+        "鼓励学生在理解算法原理后，尝试独立编写代码，减少对粘贴的依赖。",
+        "加强对算法的深入理解，而不仅仅是代码的实现。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2024-07-25 10:00:00",
+      "has_complete_history": true,
+      "history_event_count": 16,
+      "analysis_quality": "深度分析"
+    }
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "problem_id": "2String2",
+  "total_events": 23,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 4,
+    "total_tests": 4,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 正常重复2次\r\n[PASS] 正常重复2次\r\n[TEST] 单次出现\r\n[PASS] 单次出现\r\n[TEST] 不存在\r\n[PASS] 不存在\r\n[TEST] 重复多次\r\n[PASS] 重复多次\r\n[RESULT] 4/4 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1762578277687
+  },
+  "time_analysis": {
+    "total_duration_seconds": 963.22,
+    "total_duration_formatted": "16分3秒",
+    "active_duration_seconds": 527.34,
+    "first_load_time": "2025-11-08 13:03:55",
+    "actual_start_time": "2025-11-08 13:04:31",
+    "actual_start_timestamp": 1762578271429,
+    "last_event_time": "2025-11-08 13:19:58",
+    "effective_duration_seconds": 927.16,
+    "effective_duration_formatted": "15分27秒",
+    "load_to_first_run_seconds": 40.27,
+    "first_run_to_pass_seconds": 2.05,
+    "pause_count": 1,
+    "longest_pause_seconds": 435.88,
+    "invalid_load_count": 2
+  },
+  "edit_behavior": {
+    "total_edits": 1,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 1,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 1.0,
+    "total_chars_added": 1723,
+    "total_chars_deleted": 0,
+    "large_pastes": [
+      {
+        "timestamp": 1762578271429,
+        "char_count": 1723,
+        "preview": "#include <iostream>\n#include <string>\n\nusing names..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 0,
+    "test_count": 1,
+    "successful_runs": 0,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 8,
+    "save_count": 4,
+    "has_audio": true,
+    "audio_record_count": 4,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1762578271429,
+          "char_count": 1723,
+          "preview": "#include <iostream>\n#include <string>\n\nusing names..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 100.0%，可能存在抄袭",
+      "value": 1.0
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    },
+    {
+      "type": "无效活跃",
+      "severity": "low",
+      "description": "多次加载（8次）但几乎无编辑"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 70
+  },
+  "metadata": {
+    "student_id": "2024141460535_彭棋瑞",
+    "problem_id": "2String2",
+    "analysis_time": "2025-12-18 10:08:44",
+    "history_events_count": 23,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "字符串子串查找与匹配",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生直接粘贴了实现代码，代码逻辑清晰，使用了substr进行子串匹配，并循环检查重复次数。",
+          "测试用例全部通过，得分100分，说明对字符串匹配和子串查找的理解是正确的。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "循环与计数",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中使用了嵌套的while循环来计算word的连续重复次数，并用max_count变量进行最大值统计。",
+          "测试用例全部通过，得分100分，表明循环和计数逻辑正确。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "边界条件处理",
+        "mastery_level": "精通",
+        "mastery_score": 90,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中包含了对word为空或长度大于sequence的边界情况处理（if (m == 0 || m > n) return 0;）。",
+          "while循环条件（current + m <= n）也考虑了字符串越界问题。",
+          "所有测试用例通过，说明边界条件处理得当。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "C++ STL string::substr()",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中正确使用了sequence.substr(current, m)来提取子字符串进行比较。",
+          "测试用例全部通过，表明对substr()函数的使用是正确的。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "学生没有遇到编译错误，且一次性通过所有测试，表明能够预见潜在问题并写出正确代码。",
+      "error_fixing_efficiency": "无错误需要修复，效率极高。",
+      "debugging_strategy": "代码一次性通过测试，可能采用了先思考后编码的策略，或者对题目理解非常透彻，直接写出了正确解法。",
+      "evidence_from_history": "仅有一次测试运行，结果全通过，没有经历调试过程。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "一步到位型",
+      "key_changes": [
+        "学生在第一次编辑操作（timestamp=1762578271429）中，直接粘贴了完整的解决方案，覆盖了初始的空函数体。",
+        "之后没有再进行代码修改。"
+      ],
+      "learning_curve": "由于直接粘贴了完整代码，无法评估学习曲线，但代码质量高。",
+      "independence_assessment": "低独立性，代码是通过粘贴获得的，而非独立编写。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码逻辑正确，完全符合题目要求，并通过所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(n*m)",
+        "optimal": "O(n)",
+        "is_optimal": false,
+        "comment": "虽然代码能通过测试，但其时间复杂度为O(n*m)，可以通过更优的算法（如KMP的变种或字符串匹配优化）达到O(n)。"
+      },
+      "space_complexity": {
+        "actual": "O(1)",
+        "optimal": "O(1)",
+        "is_optimal": true,
+        "comment": "空间复杂度为O(1)，符合最优要求。"
+      },
+      "readability": {
+        "score": 80,
+        "comment": "代码结构清晰，变量命名尚可，但缺少必要的注释来解释逻辑。"
+      },
+      "code_style": {
+        "score": 75,
+        "comment": "代码格式基本规范，缩进一致，但可以进一步优化命名和增加空行来提高可读性。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接解决方案获取型",
+      "strategy_description": "学生在加载题目后，通过一次粘贴操作直接获得了解决方案，并未经历独立思考、编码和调试的过程。",
+      "independence_level": "低",
+      "independence_evidence": "编辑模式显示一次粘贴操作，覆盖了全部代码，表明代码并非独立完成。",
+      "time_management": "操作时间较短，符合直接获取解决方案的模式。",
+      "focus_level": "操作集中在粘贴代码和测试，没有体现深入思考过程。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 92,
+      "mastery_level": "精通",
+      "grade_recommendation": "A",
+      "confidence_level": "高",
+      "confidence_reason": "代码一次性通过所有测试，得分100，表明解决方案是有效的。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "虽然代码是粘贴的，但其正确性表明学生能够理解并应用该解决方案。若能独立完成，则完全准备好。",
+      "key_strengths": [
+        "能够快速找到并应用有效的解决方案。",
+        "对字符串匹配和循环计数等基础知识掌握牢固（体现在粘贴的代码逻辑上）。"
+      ],
+      "key_weaknesses": [
+        "独立解决问题的能力不足，倾向于直接获取答案。",
+        "对算法最优解的探索不够（时间复杂度非最优）。",
+        "代码规范性（如注释）有待提高。"
+      ],
+      "priority_improvements": [
+        "鼓励学生独立思考和编码，减少直接粘贴代码的行为。",
+        "引导学生思考算法的优化，理解时间复杂度的概念。",
+        "强调代码注释和规范的重要性。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2024-07-17 10:00:00",
+      "has_complete_history": true,
+      "history_event_count": 23,
+      "analysis_quality": "深度分析"
+    }
+  }
+}
