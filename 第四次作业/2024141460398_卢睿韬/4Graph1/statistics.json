@@ -1,0 +1,257 @@
+{
+  "problem_id": "4Graph1",
+  "total_events": 12,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 6,
+    "total_tests": 6,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 两个连通分量\r\n[PASS] 两个连通分量\r\n[TEST] 一个连通分量\r\n[PASS] 一个连通分量\r\n[TEST] 空图或只有孤立节点\r\n[PASS] 空图或只有孤立节点\r\n[TEST] 单个节点\r\n[PASS] 单个节点\r\n[TEST] 更复杂的多个连通分量\r\n[PASS] 更复杂的多个连通分量\r\n[TEST] 所有节点都孤立\r\n[PASS] 所有节点都孤立\r\n[RESULT] 6/6 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1765937030084
+  },
+  "time_analysis": {
+    "total_duration_seconds": 1066.47,
+    "total_duration_formatted": "17分46秒",
+    "active_duration_seconds": 85.5,
+    "first_load_time": "2025-12-17 09:53:54",
+    "actual_start_time": "2025-12-17 10:03:27",
+    "actual_start_timestamp": 1765937007677,
+    "last_event_time": "2025-12-17 10:11:41",
+    "effective_duration_seconds": 493.76,
+    "effective_duration_formatted": "8分13秒",
+    "load_to_first_run_seconds": 591.48,
+    "first_run_to_pass_seconds": 3.65,
+    "pause_count": 2,
+    "longest_pause_seconds": 572.71,
+    "invalid_load_count": 1
+  },
+  "edit_behavior": {
+    "total_edits": 1,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 1,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 1.0,
+    "total_chars_added": 1079,
+    "total_chars_deleted": 0,
+    "large_pastes": [
+      {
+        "timestamp": 1765937007677,
+        "char_count": 1079,
+        "preview": "class Solution {\npublic:\n    int countComponents(i..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 1,
+    "test_count": 1,
+    "successful_runs": 1,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 1,
+    "save_count": 4,
+    "has_audio": true,
+    "audio_record_count": 1,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1765937007677,
+          "char_count": 1079,
+          "preview": "class Solution {\npublic:\n    int countComponents(i..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 100.0%，可能存在抄袭",
+      "value": 1.0
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 70
+  },
+  "metadata": {
+    "student_id": "2024141460398_卢睿韬",
+    "problem_id": "4Graph1",
+    "analysis_time": "2026-01-12 12:30:18",
+    "history_events_count": 12,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "图的表示（邻接表）",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在`buildGraph`函数中正确实现了邻接表的构建。",
+          "在`countComponents`函数中，`vector<vector<int>> adj(n);` 和后续的边添加操作均正确。",
+          "代码中没有出现与图表示相关的编译错误或逻辑错误。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "图的遍历（DFS）",
+        "mastery_level": "精通",
+        "mastery_score": 98,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生正确实现了`dfs`函数，包括标记访问节点和递归调用邻居。",
+          "在`countComponents`函数中，`dfs`被正确调用以探索连通分量。",
+          "所有测试用例均通过，表明DFS实现是正确的。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "连通分量计数",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在`countComponents`函数中，通过遍历所有节点，对未访问节点启动DFS并计数，正确实现了连通分量的计数逻辑。",
+          "`components++`在每次成功完成一次DFS（即发现一个新连通分量）后执行。",
+          "所有测试用例均通过，最高分100分，证明了该知识点的掌握程度。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "布尔数组/visited数组的使用",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生正确初始化了`vector<bool> visited(n, false);`。",
+          "在DFS中，`visited[u] = true;` 和 `if (!visited[neighbor])` 的使用是标准的。",
+          "确保了每个节点只被访问一次，避免了重复计算和无限循环。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "无向图的边表示",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "在构建邻接表时，学生正确地为每条边添加了两个方向的连接：`adj[u].push_back(v);` 和 `adj[v].push_back(u);`。",
+          "这确保了图的无向性被正确建模。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "学生没有遇到编译错误，说明代码编写规范且对语法熟悉。",
+      "error_fixing_efficiency": "学生一次性通过了所有测试，表明代码逻辑正确，无需大量调试。",
+      "debugging_strategy": "学生在代码实现后，立即运行了包含多个测试用例的`main`函数，并观察输出。这种方法对于简单问题是有效的。",
+      "evidence_from_history": "学生在`main`函数中包含了多个测试用例，并在代码实现后直接运行测试，所有测试通过。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "一次性完成型",
+      "key_changes": [
+        "学生在加载题目后，直接通过粘贴操作（`paste_replace`）替换了`Solution`类中的占位符代码，并完成了`main`函数中的测试用例。"
+      ],
+      "learning_curve": "由于学生直接粘贴了完整的解决方案，无法观察到学习过程中的迭代和改进。",
+      "independence_assessment": "低。学生通过粘贴操作直接获得了解决方案，而非独立思考和实现。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码逻辑完全正确，通过了所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(N + M)",
+        "optimal": "O(N + M)",
+        "is_optimal": true,
+        "comment": "构建邻接表为O(M)，DFS遍历所有节点和边为O(N+M)，整体复杂度最优。"
+      },
+      "space_complexity": {
+        "actual": "O(N + M)",
+        "optimal": "O(N + M)",
+        "is_optimal": true,
+        "comment": "邻接表需要O(N+M)空间，visited数组需要O(N)空间，整体复杂度最优。"
+      },
+      "readability": {
+        "score": 80,
+        "comment": "代码结构清晰，函数划分合理，变量命名尚可。但缺少对关键逻辑的注释。"
+      },
+      "code_style": {
+        "score": 85,
+        "comment": "代码格式基本统一，缩进正确。`using namespace std;`的使用在大型项目中可能不推荐，但在此场景下可接受。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接解决方案型",
+      "strategy_description": "学生加载题目后，通过粘贴操作直接引入了完整的解决方案，并运行了测试用例。",
+      "independence_level": "低",
+      "independence_evidence": "编辑模式显示为`paste_replace`，且代码量大，表明学生很可能直接复制了答案，而非独立完成。",
+      "time_management": "操作时间较短，特别是粘贴代码和运行测试的时间，符合直接获取答案的模式。",
+      "focus_level": "粘贴操作后立即运行测试，表明其主要目的是验证已有代码的正确性，而非深入理解过程。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 95,
+      "mastery_level": "精通",
+      "grade_recommendation": "A",
+      "confidence_level": "高",
+      "confidence_reason": "学生提交的代码通过了所有测试，且代码质量高，逻辑严谨。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "学生已正确掌握图的遍历和连通分量计算的核心知识点。",
+      "key_strengths": [
+        "能够正确实现图的邻接表表示和DFS遍历。",
+        "能够正确计算连通分量的数量。",
+        "代码效率高，复杂度最优。"
+      ],
+      "key_weaknesses": [
+        "缺乏独立解决问题的能力，主要通过粘贴代码完成作业。",
+        "学习过程中的思考和探索不足。"
+      ],
+      "priority_improvements": [
+        "鼓励学生独立思考和编码，理解算法的每一步。",
+        "引导学生从题目描述出发，逐步构建解决方案。",
+        "加强对算法实现过程的理解和分析。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2026-01-12 13:17:07",
+      "has_complete_history": true,
+      "history_event_count": 12,
+      "analysis_quality": "深度分析"
+    }
+  }
+}

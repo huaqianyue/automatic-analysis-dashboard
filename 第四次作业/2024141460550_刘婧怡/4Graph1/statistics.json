@@ -1,0 +1,250 @@
+{
+  "problem_id": "4Graph1",
+  "total_events": 7,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 6,
+    "total_tests": 6,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 两个连通分量\r\n[PASS] 两个连通分量\r\n[TEST] 一个连通分量\r\n[PASS] 一个连通分量\r\n[TEST] 空图或只有孤立节点\r\n[PASS] 空图或只有孤立节点\r\n[TEST] 单个节点\r\n[PASS] 单个节点\r\n[TEST] 更复杂的多个连通分量\r\n[PASS] 更复杂的多个连通分量\r\n[TEST] 所有节点都孤立\r\n[PASS] 所有节点都孤立\r\n[RESULT] 6/6 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1768204593408
+  },
+  "time_analysis": {
+    "total_duration_seconds": 313.74,
+    "total_duration_formatted": "5分13秒",
+    "active_duration_seconds": 6.98,
+    "first_load_time": "2026-01-12 15:51:19",
+    "actual_start_time": "2026-01-12 15:51:19",
+    "actual_start_timestamp": 1768204279675,
+    "last_event_time": "2026-01-12 15:56:33",
+    "effective_duration_seconds": 313.74,
+    "effective_duration_formatted": "5分13秒",
+    "load_to_first_run_seconds": -310.71,
+    "first_run_to_pass_seconds": 313.73,
+    "pause_count": 1,
+    "longest_pause_seconds": 306.76,
+    "invalid_load_count": 0
+  },
+  "edit_behavior": {
+    "total_edits": 0,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 0,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 0.0,
+    "total_chars_added": 0,
+    "total_chars_deleted": 0,
+    "large_pastes": []
+  },
+  "execution": {
+    "run_count": 1,
+    "test_count": 1,
+    "successful_runs": 1,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 1,
+    "save_count": 2,
+    "has_audio": false,
+    "audio_record_count": 0,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "异常快速完成",
+      "severity": "high",
+      "description": "在 5分13秒 内完成且无编译错误",
+      "value": 313.74
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 90
+  },
+  "metadata": {
+    "student_id": "2024141460550_刘婧怡4",
+    "problem_id": "4Graph1",
+    "analysis_time": "2026-01-12 16:05:05",
+    "history_events_count": 7,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "图的表示（邻接表）",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生成功实现了`buildGraph`函数，能够正确地将边列表转换为邻接表表示。",
+          "`printGraph`函数也正确实现，表明对邻接表结构有清晰理解。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "图的遍历（DFS/BFS）",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生实现了DFS函数，能够正确地递归遍历图的连通分量。",
+          "代码逻辑清晰，能够正确处理已访问节点，避免重复访问。",
+          "BFS函数也已实现，虽然未在主逻辑中使用，但表明对BFS也有了解。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "连通分量概念",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生的核心逻辑`countComponents`函数正确地利用了图遍历来计数连通分量。",
+          "通过遍历所有节点，并对未访问节点启动一次DFS/BFS来计数，这是计算连通分量的标准方法。",
+          "所有测试用例均通过，证明对连通分量的定义和计算方法理解透彻。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "布尔数组/visited数组的使用",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生正确初始化了`visited`数组，并将其作为DFS的参数。",
+          "`visited`数组被正确用于标记节点，并在DFS中检查以避免重复遍历。",
+          "所有测试用例通过，表明对`visited`数组的正确使用。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "C++ STL容器（vector, queue）",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生熟练使用了`std::vector`来表示邻接表和`visited`数组。",
+          "`std::queue`在BFS函数中被正确使用。",
+          "代码风格和容器使用均符合C++标准。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "递归与栈",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "DFS函数的实现是递归的，表明学生理解递归的工作原理。",
+          "递归调用能够正确地处理图的深度遍历。",
+          "所有测试用例通过，没有出现栈溢出等问题，说明对递归深度有基本把握。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 95,
+      "level": "精通",
+      "error_recognition_ability": "学生没有遇到编译错误，并且代码一次性通过了所有测试用例，表明其错误识别和预防能力极强。",
+      "error_fixing_efficiency": "效率极高，一次运行和测试即通过所有用例，无需修正。",
+      "debugging_strategy": "代码逻辑严谨，测试用例覆盖全面，体现了良好的设计和验证能力，可能在编码前进行了充分的思考和规划。",
+      "evidence_from_history": "仅有一次运行和一次测试，且测试结果为100分，表明代码质量极高，无需调试。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "一次性完成型",
+      "key_changes": [
+        "学生在第一次提交的代码中就实现了完整的解决方案，并且包含了测试主函数。"
+      ],
+      "learning_curve": "学生似乎对该问题和相关算法非常熟悉，能够直接写出正确且高效的代码。",
+      "independence_assessment": "极高独立性，代码是原创且一次性通过测试。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码逻辑完全正确，通过了所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(N + M)",
+        "optimal": "O(N + M)",
+        "is_optimal": true,
+        "comment": "使用邻接表和DFS/BFS遍历图，时间复杂度为O(N+M)，达到最优。"
+      },
+      "space_complexity": {
+        "actual": "O(N + M)",
+        "optimal": "O(N + M)",
+        "is_optimal": true,
+        "comment": "邻接表占用O(N+M)空间，visited数组占用O(N)空间，总空间复杂度为O(N+M)，达到最优。"
+      },
+      "readability": {
+        "score": 90,
+        "comment": "代码结构清晰，函数划分合理，命名规范，易于理解。缺少一些详细的注释，但逻辑本身很清晰。"
+      },
+      "code_style": {
+        "score": 90,
+        "comment": "代码风格统一，缩进、空格使用规范，符合一般编程习惯。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接求解型",
+      "strategy_description": "学生似乎直接理解了问题，并能够快速构建出正确的算法和代码。",
+      "independence_level": "极高",
+      "independence_evidence": "仅有一次运行和测试，且一次通过，表明学生独立完成度非常高，没有表现出依赖外部资源或反复试错的迹象。",
+      "time_management": "总学习时长（5分13秒）和操作间隔（如run_start到run_end的2.793秒）表明学生对问题和解决方案有快速的掌握和实现能力。",
+      "focus_level": "学生在短时间内完成了代码编写、运行和测试，显示出高度的专注和效率。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 98,
+      "mastery_level": "精通",
+      "grade_recommendation": "A+",
+      "confidence_level": "极高",
+      "confidence_reason": "学生提交的代码一次性通过了所有测试用例，并且代码质量高，历史记录显示其操作高效且无错误。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "学生在图论基础（表示、遍历、连通分量）方面表现出精通水平，可以自信地进入更复杂的图算法或数据结构主题。",
+      "key_strengths": [
+        "扎实的图论基础知识（邻接表、DFS/BFS）",
+        "优秀的算法设计和实现能力",
+        "高效的代码编写和调试能力（几乎无需调试）",
+        "熟练掌握C++ STL容器"
+      ],
+      "key_weaknesses": [
+        "代码注释可以更丰富，以提高可维护性（非常轻微的不足）"
+      ],
+      "priority_improvements": [
+        "在后续学习中，鼓励学生为代码添加更详尽的注释，以培养良好的文档习惯。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2026-01-12 16:08:04",
+      "has_complete_history": true,
+      "history_event_count": 7,
+      "analysis_quality": "深度分析"
+    }
+  }
+}

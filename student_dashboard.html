@@ -76,8 +76,6 @@
         <!-- 学生详情内容 -->
         <div id="studentContent" class="hidden">
             
-
-
             <!-- 题目详细分析 -->
             <section class="mb-8" id="problemsAnalysis">
                 <!-- 题目分析内容将动态生成 -->
@@ -90,6 +88,7 @@
     <script>
         // 题目信息 - 直接写入源代码，避免动态加载
         const problems = [
+            // 第一次作业 - 顺序表
             {
                 "id": "1SequentialList1",
                 "shortDescription": "顺序表1：删除并返回最小值",
@@ -105,6 +104,7 @@
                 "shortDescription": "顺序表3：合并两个有序顺序表",
                 "fullDescription": "将两个有序顺序表合并成一个新的有序顺序表并由函数返回结果顺序表。"
             },
+            // 第二次作业 - 字符串
             {
                 "id": "2String1",
                 "shortDescription": "字符串1：按分隔符拆分字符串",
@@ -124,6 +124,75 @@
                 "id": "2String4",
                 "shortDescription": "字符串4：无重复字符的最长子串",
                 "fullDescription": "给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。\n\n**子串** 是字符串中连续的字符序列。"
+            },
+            // 第三次作业 - 树
+            {
+                "id": "3Tree1",
+                "shortDescription": "树1：计算二叉树的高度",
+                "fullDescription": "给定一个二叉树的根节点 `root`，返回该二叉树的高度。二叉树的高度定义为从根节点到最远叶子节点的 最长路径上的节点数。空树的高度为0，单节点树的高度为1。",
+            },
+            {
+                "id": "3Tree2",
+                "shortDescription": "树2：翻转二叉树",
+                "fullDescription": "给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。",
+            },
+            {
+                "id": "3Tree3",
+                "shortDescription": "树3：判断对称二叉树",
+                "fullDescription": "给你一个二叉树的根节点 `root` ，检查它是否轴对称。也就是说，它左右两棵子树是否是镜像对称的。",
+            },
+            {
+                "id": "3Tree4",
+                "shortDescription": "树4：表达式树中缀遍历（带括号）",
+                "fullDescription": "给定一个二叉表达式树的根节点 `root`，该树表示一个算术表达式。树的叶子节点是操作数（例如：`a`, `b`, `1`, `2`），非叶子节点是运算符（例如：`+`, `-`, `*`, `/`）。\n\n请你实现一个函数，对这棵表达式树进行中序遍历，并返回其对应的中缀表达式字符串。在生成中缀表达式时，需要根据运算符的优先级和结合性，在必要时添加括号，以确保表达式的语义正确。\n\n**运算符优先级：**\n*   `*`, `/` 优先级高于 `+`, `-`。\n*   相同优先级的运算符（例如 `+` 和 `-`，或 `*` 和 `/`）遵循左结合性。",
+            },
+            // 第四次作业 - 图
+            {
+                "id": "4Graph1",
+                "shortDescription": "图1：计算图的连通分量数量",
+                "fullDescription": "给定一个包含 `n` 个节点和 `m` 条边的无向图。图的节点从 `0` 到 `n-1` 编号。你需要计算并返回图中连通分量的数量。\n\n一个图的连通分量是一个子图，其中任意两个顶点之间都存在路径，并且该子图不能再被更大的连通子图所包含。",
+            },
+            {
+                "id": "4Graph2",
+                "shortDescription": "图2：判断无向图中是否存在环",
+                "fullDescription": "给定一个包含 `n` 个节点和 `m` 条边的无向图。图的节点从 `0` 到 `n-1` 编号。你需要判断图中是否存在环。\n\n环是指一条从某个节点出发，经过一系列不同节点，最终回到起点的路径。",
+            },
+            {
+                "id": "4Graph3",
+                "shortDescription": "图3：无权图最短路径",
+                "fullDescription": "给定一个包含 `n` 个节点和 `m` 条边的无向图。图的节点从 `0` 到 `n-1` 编号。你需要找到从 `start` 节点到 `end` 节点的最短路径的长度。如果 `start` 节点和 `end` 节点之间没有路径，返回 `-1`。\n\n路径长度定义为路径上边的数量。",
+            },
+            // 第五次作业 - 查找
+            {
+                "id": "5Search1",
+                "shortDescription": "查找1：查找旋转排序数组中的最小值",
+                "fullDescription": "一个升序排序的数组在某个未知点（例如，`[0,1,2,4,5,6,7]` 可能变为 `[4,5,6,7,0,1,2]`）进行了旋转。给定这样一个旋转后的数组 `nums`，找到并返回其最小元素。\n\n数组中可能包含重复元素。",
+            },
+            {
+                "id": "5Search2",
+                "shortDescription": "查找2：寻找峰值",
+                "fullDescription": "峰值元素是指其值大于其相邻元素（如果存在）的元素。给定一个整数数组 `nums`，你需要找到并返回数组中的任意一个峰值。\n\n你可以假设 `nums[-1] = nums[n] = -∞`（即数组两端的虚拟元素值极小）。数组中可能包含多个峰值，返回其中任意一个峰值的索引即可。\n\n**约束条件：**\n*   `1 <= nums.length <= 1000`\n*   `-2^31 <= nums[i] <= 2^31 - 1`\n*   对于所有有效的 `i`，`nums[i] != nums[i+1]`。",
+            },
+            {
+                "id": "5Search3",
+                "shortDescription": "查找3：两个有序数组的中位数",
+                "fullDescription": "给定两个大小分别为 `m` 和 `n` 的有序数组 `nums1` 和 `nums2`。请你找出这两个有序数组的中位数，并返回。要求算法的时间复杂度为 `O(log(m+n))`。",
+            },
+            // 第六次作业 - 排序
+            {
+                "id": "6Sort1",
+                "shortDescription": "排序1：合并区间",
+                "fullDescription": "以数组 `intervals` 表示若干个区间。其中每个区间 `intervals[i] = [starti, endi]`。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组中的每个区间恰好覆盖输入中的所有区间。\n\n**约束条件：**\n*   `1 <= intervals.length <= 10^4`\n*   `intervals[i].length == 2`\n*   `0 <= starti <= endi <= 10^4`",
+            },
+            {
+                "id": "6Sort2",
+                "shortDescription": "排序2：按照频率排序数组",
+                "fullDescription": "给你一个整数数组 `nums`，请你将该数组按照数字出现的频率 **升序** 排序。如果频率相同，则按照数值 **降序** 排序。\n\n**约束条件：**\n*   `1 <= nums.length <= 100`\n*   `-100 <= nums[i] <= 100`",
+            },
+            {
+                "id": "6Sort3",
+                "shortDescription": "排序3：排序链表",
+                "fullDescription": "给你链表的头节点 `head` ，请将其按 **升序** 排列并返回排序后的链表头。\n\n尝试使用 `O(n log n)` 时间复杂度和 **常数级** 空间复杂度来解决此问题。\n\n**约束条件：**\n*   链表中节点的数量在 `[0, 5 * 10^4]` 范围内\n*   `-10^5 <= Node.val <= 10^5`",
             }
         ];
 
@@ -132,12 +201,17 @@
         let currentStudentName = null;
         let currentStudent = null;
         let currentProblemId = null;
-        let currentAssignment = '第一次作业'; // 默认作业
+        // 默认作业改为 "第一次作业"，后续逻辑会根据选择器更新
+        let currentAssignment = '第一次作业'; 
         
         // 可用作业列表
         const assignments = [
             '第一次作业',
-            '第二次作业'
+            '第二次作业',
+            '第三次作业',
+            '第四次作业',
+            '第五次作业',
+            '第六次作业'
         ];
 
         // 从URL参数获取学号和姓名
@@ -168,18 +242,36 @@
             // 显示学号和姓名
             document.getElementById('studentIdDisplay').textContent = `学号: ${currentStudentId} | 姓名: ${currentStudentName}`;
             
-            // 根据当前作业过滤出对应的题目
-            // 第一次作业的题目ID以"1"开头，第二次作业的题目ID以"2"开头
-            const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
-            const filteredProblems = problems.filter(problem => 
-                problem.id.startsWith(currentAssignmentPrefix)
-            );
-            
-            // 默认加载当前作业的第一个题目
-            if (filteredProblems.length > 0) {
-                loadProblemData(filteredProblems[0].id);
+            // 初始化作业和题目选择器
+            renderAssignmentSelector();
+            renderProblemSelector();
+
+            // 默认加载当前作业的第一个题目 (在renderProblemSelector之后调用)
+            const initialProblemId = getInitialProblemIdForAssignment(currentAssignment);
+            if (initialProblemId) {
+                loadProblemData(initialProblemId);
             } else {
                 showError('当前作业没有可用的题目');
+            }
+        }
+
+        // 根据作业名称获取该作业的第一个题目ID
+        function getInitialProblemIdForAssignment(assignmentName) {
+            const prefix = getAssignmentPrefix(assignmentName);
+            const filteredProblems = problems.filter(problem => problem.id.startsWith(prefix));
+            return filteredProblems.length > 0 ? filteredProblems[0].id : null;
+        }
+
+        // 获取作业名称对应的ID前缀
+        function getAssignmentPrefix(assignmentName) {
+            switch (assignmentName) {
+                case '第一次作业': return '1';
+                case '第二次作业': return '2';
+                case '第三次作业': return '3';
+                case '第四次作业': return '4';
+                case '第五次作业': return '5';
+                case '第六次作业': return '6';
+                default: return '';
             }
         }
         
@@ -249,15 +341,14 @@
                 });
         }
 
-
-
-        // 渲染学生仪表板
+        // 渲染学生仪表板 (主要是显示内容和更新选择器)
         function renderStudentDashboard() {
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('studentContent').classList.remove('hidden');
             
-            renderAssignmentSelector();
-            renderProblemSelector();
+            // 确保选择器已经渲染，并且当前值设置正确
+            document.getElementById('assignmentSelector').value = currentAssignment;
+            renderProblemSelector(); // 重新渲染题目选择器以匹配当前作业
         }
 
         // 渲染作业选择器
@@ -275,16 +366,13 @@
             // 添加切换事件
             selector.addEventListener('change', function() {
                 currentAssignment = this.value;
+                // 题目选择器需要根据新的作业进行更新
+                renderProblemSelector();
                 
-                // 根据新切换的作业过滤出对应的题目
-                const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
-                const filteredProblems = problems.filter(problem => 
-                    problem.id.startsWith(currentAssignmentPrefix)
-                );
-                
-                // 重新加载新作业的第一个题目
-                if (filteredProblems.length > 0) {
-                    loadProblemData(filteredProblems[0].id);
+                // 加载新作业的第一个题目
+                const initialProblemId = getInitialProblemIdForAssignment(currentAssignment);
+                if (initialProblemId) {
+                    loadProblemData(initialProblemId);
                 } else {
                     showError('当前作业没有可用的题目');
                 }
@@ -294,11 +382,9 @@
         // 渲染题目选择器
         function renderProblemSelector() {
             const selector = document.getElementById('problemSelector');
-            const container = document.getElementById('problemSelectorContainer');
             
             // 根据当前作业过滤出对应的题目
-            // 第一次作业的题目ID以"1"开头，第二次作业的题目ID以"2"开头
-            const currentAssignmentPrefix = currentAssignment === '第一次作业' ? '1' : '2';
+            const currentAssignmentPrefix = getAssignmentPrefix(currentAssignment);
             const filteredProblems = problems.filter(problem => 
                 problem.id.startsWith(currentAssignmentPrefix)
             );

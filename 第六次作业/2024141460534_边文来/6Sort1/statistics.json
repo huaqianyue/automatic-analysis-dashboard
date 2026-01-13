@@ -1,0 +1,256 @@
+{
+  "problem_id": "6Sort1",
+  "total_events": 16,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 7,
+    "total_tests": 7,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 基本合并\r\n[PASS] 基本合并\r\n[TEST] 完全包含\r\n[PASS] 完全包含\r\n[TEST] 多个重叠区间\r\n[PASS] 多个重叠区间\r\n[TEST] 无重叠\r\n[PASS] 无重叠\r\n[TEST] 所有区间都重叠\r\n[PASS] 所有区间都重叠\r\n[TEST] 空输入\r\n[PASS] 空输入\r\n[TEST] 只有一个区间\r\n[PASS] 只有一个区间\r\n[RESULT] 7/7 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1766824133146
+  },
+  "time_analysis": {
+    "total_duration_seconds": 17954.86,
+    "total_duration_formatted": "4小时59分14秒",
+    "active_duration_seconds": 405.06,
+    "first_load_time": "2025-12-27 16:24:38",
+    "actual_start_time": "2025-12-27 16:28:42",
+    "actual_start_timestamp": 1766824122161,
+    "last_event_time": "2025-12-27 21:23:53",
+    "effective_duration_seconds": 17710.98,
+    "effective_duration_formatted": "4小时55分10秒",
+    "load_to_first_run_seconds": 247.16,
+    "first_run_to_pass_seconds": 7.71,
+    "pause_count": 1,
+    "longest_pause_seconds": 17549.8,
+    "invalid_load_count": 2
+  },
+  "edit_behavior": {
+    "total_edits": 1,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 1,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 1.0,
+    "total_chars_added": 879,
+    "total_chars_deleted": 0,
+    "large_pastes": [
+      {
+        "timestamp": 1766824122161,
+        "char_count": 879,
+        "preview": "class Solution {\npublic:\n    vector<vector<int>> m..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 1,
+    "test_count": 1,
+    "successful_runs": 1,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 4,
+    "save_count": 5,
+    "has_audio": true,
+    "audio_record_count": 1,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1766824122161,
+          "char_count": 879,
+          "preview": "class Solution {\npublic:\n    vector<vector<int>> m..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 100.0%，可能存在抄袭",
+      "value": 1.0
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 60
+  },
+  "metadata": {
+    "student_id": "2024141460534_边文来",
+    "problem_id": "6Sort1",
+    "analysis_time": "2026-01-12 12:30:32",
+    "history_events_count": 16,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "排序算法 (std::sort)",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在代码中直接使用了`std::sort(intervals.begin(), intervals.end());`，并且代码成功通过了所有测试用例，包括需要排序才能正确合并的场景。",
+          "没有出现与排序相关的编译错误或逻辑错误。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "区间合并逻辑",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生实现了核心的合并逻辑：`if (current[0] <= last[1]) { last[1] = max(last[1], current[1]); } else { result.push_back(current); }`。",
+          "该逻辑正确处理了重叠区间（包括完全包含和部分重叠）以及不重叠区间的情况。",
+          "所有测试用例均通过，证明了该逻辑的正确性。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "vector容器的基本操作",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生熟练使用了`vector<vector<int>>`来存储区间数据。",
+          "`result.push_back(intervals[0]);` 和 `result.push_back(current);` 表明对`push_back`的掌握。",
+          "`result.back();` 表明对获取最后一个元素的掌握。",
+          "`intervals.empty()` 用于处理空输入，显示了对容器状态的检查。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "边界条件处理 (空输入)",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码开头即有 `if (intervals.empty()) { return {}; }`，正确处理了空输入的情况。",
+          "测试用例中包含空输入，并且代码通过了该测试。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "C++ STL 算法 (max)",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "在合并区间时，使用了 `last[1] = max(last[1], current[1]);` 来更新区间的结束点。",
+          "该函数的使用正确且高效。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "能够通过运行和测试结果快速定位问题（尽管本例中没有错误）",
+      "error_fixing_efficiency": "一次性通过所有测试，表明代码逻辑设计和实现效率高",
+      "debugging_strategy": "代码结构清晰，测试用例覆盖全面，一次性通过，显示出良好的代码设计和验证能力。",
+      "evidence_from_history": "学生在粘贴代码后，直接运行并一次性通过了所有测试用例，没有出现任何编译错误或运行时错误，也没有进行额外的调试操作。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "直接实现型",
+      "key_changes": [
+        "学生直接粘贴了完整的解决方案代码，没有经历从不完整到完整的迭代过程。"
+      ],
+      "learning_curve": "无法评估学习曲线，因为代码是直接粘贴的。",
+      "independence_assessment": "低独立性，代码几乎完全是复制粘贴的，没有体现独立思考和实现过程。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码逻辑完全正确，通过了所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(N log N)",
+        "optimal": "O(N log N)",
+        "is_optimal": true,
+        "comment": "排序是O(N log N)，遍历是O(N)，总复杂度为O(N log N)，符合最优解。"
+      },
+      "space_complexity": {
+        "actual": "O(N) or O(log N)",
+        "optimal": "O(N) or O(log N)",
+        "is_optimal": true,
+        "comment": "O(N)用于存储结果，排序可能需要O(log N)或O(N)的额外空间，取决于具体实现，符合最优解。"
+      },
+      "readability": {
+        "score": 85,
+        "comment": "代码结构清晰，变量命名合理，有注释解释关键步骤。"
+      },
+      "code_style": {
+        "score": 90,
+        "comment": "代码格式规范，缩进一致，符合C++编码风格。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接应用型",
+      "strategy_description": "学生直接粘贴了解决方案代码，没有经历独立思考、设计和实现的过程。",
+      "independence_level": "低",
+      "independence_evidence": "粘贴操作记录（`operationType: paste_replace`）表明代码不是独立编写的。",
+      "time_management": "操作时间非常短，从加载题目到粘贴代码、运行测试，总时长很短，不符合独立完成的正常流程。",
+      "focus_level": "无法评估专注度，因为主要操作是粘贴代码。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 95,
+      "mastery_level": "精通",
+      "grade_recommendation": "A",
+      "confidence_level": "高",
+      "confidence_reason": "学生提交的代码逻辑正确，通过了所有测试，并且代码质量高。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "在当前主题上表现出高水平的掌握（尽管是通过粘贴代码）。",
+      "key_strengths": [
+        "能够理解并运行已有的高质量代码。",
+        "代码结构清晰，逻辑正确。",
+        "对C++ STL的熟悉程度（排序、vector、max）。"
+      ],
+      "key_weaknesses": [
+        "缺乏独立解决问题的能力，代码粘贴行为明显。",
+        "学习过程记录不完整，无法评估实际学习过程和思考深度。"
+      ],
+      "priority_improvements": [
+        "鼓励学生独立思考和编码，减少粘贴行为。",
+        "引导学生理解代码的实现思路和算法原理。",
+        "在后续任务中，要求学生解释代码逻辑，以评估其真实理解程度。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2026-01-12 13:34:52",
+      "has_complete_history": true,
+      "history_event_count": 16,
+      "analysis_quality": "深度分析"
+    }
+  }
+}

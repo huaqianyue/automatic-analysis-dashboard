@@ -1,0 +1,261 @@
+{
+  "problem_id": "6Sort2",
+  "total_events": 18,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 6,
+    "total_tests": 6,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 基本频率排序\r\n[PASS] 基本频率排序\r\n[TEST] 不同频率和数值\r\n[PASS] 不同频率和数值\r\n[TEST] 所有元素频率相同\r\n[PASS] 所有元素频率相同\r\n[TEST] 空数组\r\n[PASS] 空数组\r\n[TEST] 单个元素\r\n[PASS] 单个元素\r\n[TEST] 所有元素相同\r\n[PASS] 所有元素相同\r\n[RESULT] 6/6 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1765866470046
+  },
+  "time_analysis": {
+    "total_duration_seconds": 359425.75,
+    "total_duration_formatted": "99小时50分25秒",
+    "active_duration_seconds": 788.55,
+    "first_load_time": "2025-12-16 13:50:55",
+    "actual_start_time": "2025-12-16 14:27:44",
+    "actual_start_timestamp": 1765866464355,
+    "last_event_time": "2025-12-20 17:41:21",
+    "effective_duration_seconds": 357216.96,
+    "effective_duration_formatted": "99小时13分36秒",
+    "load_to_first_run_seconds": 2212.66,
+    "first_run_to_pass_seconds": 1.83,
+    "pause_count": 3,
+    "longest_pause_seconds": 356376.26,
+    "invalid_load_count": 4
+  },
+  "edit_behavior": {
+    "total_edits": 1,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 1,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 1.0,
+    "total_chars_added": 435,
+    "total_chars_deleted": 0,
+    "large_pastes": [
+      {
+        "timestamp": 1765866464355,
+        "char_count": 435,
+        "preview": "// 1. 统计每个数字的频率\n        map<int, int> freq;\n      ..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 0,
+    "test_count": 1,
+    "successful_runs": 0,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 9,
+    "save_count": 4,
+    "has_audio": true,
+    "audio_record_count": 1,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1765866464355,
+          "char_count": 435,
+          "preview": "// 1. 统计每个数字的频率\n        map<int, int> freq;\n      ..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 100.0%，可能存在抄袭",
+      "value": 1.0
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    },
+    {
+      "type": "无效活跃",
+      "severity": "low",
+      "description": "多次加载（9次）但几乎无编辑"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 60
+  },
+  "metadata": {
+    "student_id": "2024141460456_汤恩旭",
+    "problem_id": "6Sort2",
+    "analysis_time": "2026-01-12 12:30:32",
+    "history_events_count": 18,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "哈希表/映射 (std::map)",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在代码中正确使用了`std::map<int, int> freq;`来统计数字频率。",
+          "`freq[num]++;` 的操作表明学生理解了map的键值对存储和自增操作。",
+          "代码在测试用例中表现良好，说明map的使用是正确的。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "自定义排序规则 (Lambda表达式与std::sort)",
+        "mastery_level": "精通",
+        "mastery_score": 98,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生使用`std::sort`配合lambda表达式实现了自定义排序逻辑。",
+          "lambda表达式`[&freq](int a, int b)`正确捕获了`freq` map。",
+          "排序逻辑`if (freq[a] != freq[b]) { return freq[a] < freq[b]; } else { return a > b; }`精确地实现了题目要求的“频率升序，数值降序”的排序规则。",
+          "所有测试用例均通过，证明了排序逻辑的正确性。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "C++ STL 容器与算法",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码中包含了`#include <vector>`, `#include <algorithm>`, `#include <map>`，表明对常用STL容器和算法有良好掌握。",
+          "使用了`std::vector`进行数据存储和传递。",
+          "使用了`std::sort`进行排序。",
+          "使用了`std::map`进行频率统计。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "基本数据结构与算法设计思路",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生能够根据题目要求，设计出“先统计频率，再自定义排序”的有效算法思路。",
+          "该思路与题目要求高度契合，并且能够高效解决问题。",
+          "最终代码的正确性证明了算法设计思路的有效性。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "调试与测试",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在代码中保留了`printVector`辅助函数，虽然最终未调用，但表明有调试的意识。",
+          "学生进行了1次测试，并且测试通过，获得了100分。",
+          "没有出现编译错误，说明代码逻辑在提交前是完整的。",
+          "代码演变记录显示，学生在加载题目后，直接粘贴了实现代码，然后进行了测试，整个过程非常高效。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "能够一次性写出正确代码，无需调试",
+      "error_fixing_efficiency": "无错误，效率最高",
+      "debugging_strategy": "代码编写一次性成功，无需系统性调试",
+      "evidence_from_history": "学生在粘贴代码后直接测试通过，没有出现任何编译错误或运行时错误，表明其代码编写能力很强，无需调试过程。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "一次性完成型",
+      "key_changes": [
+        "学生在加载题目后，直接粘贴了完整的实现代码，没有经历多次修改和迭代。"
+      ],
+      "learning_curve": "一次性成功，学习曲线平缓",
+      "independence_assessment": "高独立性，代码是直接粘贴的，但粘贴的内容是完全正确的，表明学生可能对该类问题非常熟悉，或者能够快速找到并验证正确解决方案。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码完全正确，通过所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(N log N)",
+        "optimal": "O(N log N)",
+        "is_optimal": true,
+        "comment": "使用map统计频率为O(N)，排序为O(N log N)，整体复杂度为O(N log N)，符合最优复杂度。"
+      },
+      "space_complexity": {
+        "actual": "O(N)",
+        "optimal": "O(N)",
+        "is_optimal": true,
+        "comment": "map用于存储频率，最坏情况下需要O(N)空间。"
+      },
+      "readability": {
+        "score": 85,
+        "comment": "代码结构清晰，变量命名规范，逻辑易于理解。保留了辅助函数和注释，体现了良好的编程习惯。"
+      },
+      "code_style": {
+        "score": 90,
+        "comment": "代码格式统一，缩进正确，符合C++编码规范。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接实现型",
+      "strategy_description": "学生似乎能够快速理解题目要求，并直接编写出解决方案，而不是通过试错或逐步改进。",
+      "independence_level": "高",
+      "independence_evidence": "粘贴操作一次性完成，且代码正确，没有额外的调试或修改记录，表明学生可能对该类问题非常熟悉，或者能够快速找到并验证解决方案。",
+      "time_management": "操作时间间隔正常，没有异常的长时间停顿或快速连续操作。",
+      "focus_level": "专注度高，一次性完成任务。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 97,
+      "mastery_level": "精通",
+      "grade_recommendation": "A",
+      "confidence_level": "高",
+      "confidence_reason": "学生提交的代码一次性通过所有测试，且代码质量高，历史记录清晰，证据充分。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "学生在哈希表、自定义排序、STL容器和算法方面都表现出精通水平，可以继续学习更复杂的算法和数据结构。",
+      "key_strengths": [
+        "扎实的STL容器和算法功底",
+        "高效的算法设计和代码实现能力",
+        "对自定义排序规则的深刻理解"
+      ],
+      "key_weaknesses": [],
+      "priority_improvements": [
+        "无明显薄弱项，可继续挑战更复杂的题目。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2026-01-12 13:27:24",
+      "has_complete_history": true,
+      "history_event_count": 18,
+      "analysis_quality": "深度分析"
+    }
+  }
+}

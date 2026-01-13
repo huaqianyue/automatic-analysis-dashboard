@@ -1,0 +1,260 @@
+{
+  "problem_id": "6Sort1",
+  "total_events": 8,
+  "test_result": {
+    "final_score": 100,
+    "test_passed": true,
+    "passed_tests": 7,
+    "total_tests": 7,
+    "test_attempts": 1,
+    "first_pass_attempt": 1,
+    "test_success": true,
+    "test_details": "[TEST] 基本合并\r\n[PASS] 基本合并\r\n[TEST] 完全包含\r\n[PASS] 完全包含\r\n[TEST] 多个重叠区间\r\n[PASS] 多个重叠区间\r\n[TEST] 无重叠\r\n[PASS] 无重叠\r\n[TEST] 所有区间都重叠\r\n[PASS] 所有区间都重叠\r\n[TEST] 空输入\r\n[PASS] 空输入\r\n[TEST] 只有一个区间\r\n[PASS] 只有一个区间\r\n[RESULT] 7/7 tests passed\r\n[SCORE] 100\r\n",
+    "test_timestamp": 1766849874070
+  },
+  "time_analysis": {
+    "total_duration_seconds": 30.43,
+    "total_duration_formatted": "30秒",
+    "active_duration_seconds": 30.43,
+    "first_load_time": "2025-12-27 23:37:26",
+    "actual_start_time": "2025-12-27 23:37:50",
+    "actual_start_timestamp": 1766849870686,
+    "last_event_time": "2025-12-27 23:37:57",
+    "effective_duration_seconds": 6.4,
+    "effective_duration_formatted": "6秒",
+    "load_to_first_run_seconds": 26.48,
+    "first_run_to_pass_seconds": 0.94,
+    "pause_count": 0,
+    "longest_pause_seconds": null,
+    "invalid_load_count": 1
+  },
+  "edit_behavior": {
+    "total_edits": 1,
+    "type_count": 0,
+    "ime_input_count": 0,
+    "paste_insert_count": 0,
+    "paste_replace_count": 1,
+    "delete_count": 0,
+    "undo_redo_count": 0,
+    "other_edit_count": 0,
+    "paste_ratio": 1.0,
+    "total_chars_added": 805,
+    "total_chars_deleted": 0,
+    "large_pastes": [
+      {
+        "timestamp": 1766849870686,
+        "char_count": 805,
+        "preview": "vector<vector<int>> merge(vector<vector<int>>& int..."
+      }
+    ]
+  },
+  "execution": {
+    "run_count": 0,
+    "test_count": 1,
+    "successful_runs": 0,
+    "compile_errors": 0,
+    "compile_error_details": [],
+    "run_timeouts": 0,
+    "debug_sessions": 0,
+    "debug_steps": 0,
+    "breakpoint_adds": 0,
+    "breakpoint_removes": 0,
+    "debug_expr_evals": 0,
+    "debug_usage_ratio": 0.0
+  },
+  "lifecycle": {
+    "load_count": 1,
+    "save_count": 2,
+    "has_audio": true,
+    "audio_record_count": 1,
+    "audio_play_count": 0
+  },
+  "suspicious_behaviors": [
+    {
+      "type": "大段粘贴",
+      "severity": "high",
+      "description": "检测到 1 次大段粘贴（>100字符）",
+      "details": [
+        {
+          "timestamp": 1766849870686,
+          "char_count": 805,
+          "preview": "vector<vector<int>> merge(vector<vector<int>>& int..."
+        }
+      ]
+    },
+    {
+      "type": "高粘贴比例",
+      "severity": "medium",
+      "description": "粘贴比例达 100.0%，可能存在抄袭",
+      "value": 1.0
+    },
+    {
+      "type": "异常快速完成",
+      "severity": "high",
+      "description": "在 30秒 内完成且无编译错误",
+      "value": 30.43
+    },
+    {
+      "type": "一次性完成",
+      "severity": "high",
+      "description": "首次测试即通过，且编辑次数很少，高度疑似粘贴完整代码"
+    }
+  ],
+  "learning_strategy": {
+    "strategy_type": "平衡型",
+    "proficiency_score": 45
+  },
+  "metadata": {
+    "student_id": "2024141460396_文一凡",
+    "problem_id": "6Sort1",
+    "analysis_time": "2026-01-12 12:30:31",
+    "history_events_count": 8,
+    "has_test_result_file": true
+  },
+  "ai_analysis": {
+    "knowledge_points_analysis": [
+      {
+        "knowledge_point": "区间排序",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在代码中正确使用了std::sort函数，并提供了自定义比较lambda表达式来按区间起始点排序。",
+          "排序逻辑 `a[0] < b[0]` 是正确的，并且在测试用例中得到了验证。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "区间合并逻辑",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生实现了正确的区间合并逻辑：比较当前区间的起始点与结果列表中最后一个区间的结束点。",
+          "当 `currStart <= lastEnd` 时，正确地更新了 `lastEnd = max(lastEnd, currEnd)`。",
+          "当 `currStart > lastEnd` 时，正确地将当前区间 `intervals[i]` 添加到结果 `result` 中。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "vector基本操作 (push_back, back)",
+        "mastery_level": "精通",
+        "mastery_score": 95,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生正确使用了 `result.push_back(intervals[0])` 初始化结果列表。",
+          "在合并逻辑中，学生正确使用了 `result.back()[1]` 来访问并修改结果列表中最后一个区间的结束点。",
+          "在无重叠时，学生也正确使用了 `result.push_back(intervals[i])` 添加新区间。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "边界条件处理 (空输入)",
+        "mastery_level": "精通",
+        "mastery_score": 100,
+        "is_weak": false,
+        "evidence_from_history": [
+          "代码开头即检查 `if (intervals.empty()) { return {}; }`，正确处理了空输入的情况。",
+          "测试用例中包含了空输入，并且代码通过了该测试。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      },
+      {
+        "knowledge_point": "lambda表达式",
+        "mastery_level": "精通",
+        "mastery_score": 90,
+        "is_weak": false,
+        "evidence_from_history": [
+          "学生在 `std::sort` 中使用了lambda表达式 `[](const vector<int>& a, const vector<int>& b) { return a[0] < b[0]; }` 来定义排序规则。",
+          "该lambda表达式语法正确且功能符合要求。"
+        ],
+        "specific_errors": [],
+        "improvement_suggestions": []
+      }
+    ],
+    "weak_knowledge_points_summary": [],
+    "debugging_ability": {
+      "score": 90,
+      "level": "精通",
+      "error_recognition_ability": "学生在本次任务中没有遇到编译错误或运行时错误，说明代码逻辑清晰，对基本概念掌握牢固。",
+      "error_fixing_efficiency": "由于没有错误，无法评估，但代码一次性通过所有测试，表明其初始代码质量高。",
+      "debugging_strategy": "学生在代码实现后，直接运行了包含多个测试用例的 `main` 函数，并成功通过所有测试，显示出良好的自我验证能力。",
+      "evidence_from_history": "一次性通过所有测试用例，表明代码逻辑正确，无需进行复杂的调试。"
+    },
+    "code_evolution_analysis": {
+      "total_iterations": 1,
+      "improvement_pattern": "一次性完成",
+      "key_changes": [
+        "学生在 `problem_loaded` 事件后，立即进行了 `edit` 操作，通过 `paste_replace` 引入了完整的解决方案代码。",
+        "此后，代码未再发生变化，直接进入 `test_start` 和 `test_completed`。"
+      ],
+      "learning_curve": "本次操作记录显示，学生可能直接粘贴了解决方案，或者对该问题非常熟悉，能够一次性写出正确代码。",
+      "independence_assessment": "从 `paste_replace` 操作来看，学生可能不是完全独立完成的，但粘贴的代码质量极高，一次性通过所有测试，说明学生能够理解并运用该代码。"
+    },
+    "code_quality": {
+      "correctness": {
+        "score": 100,
+        "comment": "代码逻辑完全正确，通过了所有测试用例。"
+      },
+      "time_complexity": {
+        "actual": "O(N log N)",
+        "optimal": "O(N log N)",
+        "is_optimal": true,
+        "comment": "排序需要O(N log N)，遍历合并需要O(N)，总体时间复杂度为O(N log N)，符合最优解法。"
+      },
+      "space_complexity": {
+        "actual": "O(N)",
+        "optimal": "O(N)",
+        "is_optimal": true,
+        "comment": "结果数组最多存储N个区间，空间复杂度为O(N)，符合最优解法（不考虑输入空间）。"
+      },
+      "readability": {
+        "score": 85,
+        "comment": "代码结构清晰，变量命名有意义，注释解释了排序和合并的步骤。"
+      },
+      "code_style": {
+        "score": 80,
+        "comment": "代码格式基本统一，缩进和空格使用得当。"
+      }
+    },
+    "learning_process_assessment": {
+      "problem_solving_strategy": "直接实现/粘贴",
+      "strategy_description": "学生在加载题目后，通过一次粘贴操作完成了代码的编写，并直接进入测试环节。",
+      "independence_level": "中等",
+      "independence_evidence": "粘贴操作（`paste_replace`）表明可能不是完全独立手写，但代码质量和一次性通过测试说明学生能够理解并应用该解决方案。",
+      "time_management": "操作时间非常短（从加载到测试完成仅约6秒），表明学生可能非常熟悉此题或直接使用了现有代码。",
+      "focus_level": "高度专注，操作流程紧凑。"
+    },
+    "overall_assessment": {
+      "mastery_percentage": 96,
+      "mastery_level": "精通",
+      "grade_recommendation": "A",
+      "confidence_level": "高",
+      "confidence_reason": "学生代码一次性通过所有测试，且操作历史记录清晰，显示了对该知识点的熟练掌握。",
+      "readiness_for_next_topic": true,
+      "readiness_reason": "学生在排序和区间处理方面表现出高水平，可以继续学习更复杂的算法。",
+      "key_strengths": [
+        "对排序和区间合并算法的深刻理解和熟练应用。",
+        "代码实现效率高，一次性通过所有测试。",
+        "能够正确处理边界条件（如空输入）。"
+      ],
+      "key_weaknesses": [
+        "本次操作记录中未体现独立思考和调试过程，粘贴操作可能掩盖了实际的掌握程度。"
+      ],
+      "priority_improvements": [
+        "鼓励学生在后续任务中尝试独立完成代码编写，以更全面地评估其独立解决问题的能力。",
+        "在后续学习中，可以引入更复杂的变种问题，挑战学生的深入理解。"
+      ]
+    },
+    "metadata": {
+      "analysis_timestamp": "2024-01-12 13:19:49",
+      "has_complete_history": true,
+      "history_event_count": 8,
+      "analysis_quality": "深度分析"
+    }
+  }
+}
